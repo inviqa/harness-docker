@@ -1,0 +1,157 @@
+{% set blocks = 'application/skeleton/_twig/README.md/' %}
+# {{ @('workspace.name') }}
+
+Please follow the below steps to get started, if you encounter any issues installing the dependencies or provisioning the development environment, please check the [Common Issues](#common-issues) section first.
+
+## Development Environment
+
+### Getting Started
+
+#### Prerequisites
+
+##### General
+
+- Access to LastPass folders
+  - `Shared-{{ @('workspace.name') }}-Servers` and `Shared-{{ @('workspace.name') }}-Accounts`
+
+##### Docker
+
+- A working Docker setup
+  - On macOS, use [Docker Desktop for Mac](https://docs.docker.com/docker-for-mac/install/).
+  - On Linux, add the official Docker repository described under the "Server" section on [Install Docker Engine](https://docs.docker.com/engine/install/) and install the "docker-ce" package.
+    You will also need to have a recent [docker-compose](https://docs.docker.com/compose/install/) version - at least `1.26.0`.
+
+#### Setup
+
+1. Install [workspace](https://github.com/my127/workspace)
+2. Copy the LastPass entry "{{ @('workspace.name') }}: Development Environment Key" to a new blank file named `workspace.override.yml` in the project root.
+3. Run `ws install`
+
+{% include blocks ~ 'websites.md.twig' %}
+
+**Additional services**:
+- Mailhog: [https://mail.my127.site](https://mail.my127.site)
+{% if @('services.rabbitmq.enabled') -%}
+- RabbitMQ: [https://{{ @('rabbitmq.external_host') }}](https://{{ @('rabbitmq.external_host') }})
+{% endif -%}
+{% if @('services.jenkins.enabled') -%}
+- Jenkins: [https://{{ @('jenkins.external_host') }}](https://{{ @('jenkins.external_host') }})
+{% endif %}
+{% if @('services.solr.enabled') -%}
+- Solr: [https://solr-{{ @('hostname') }}/solr/](https://solr-{{ @('hostname') }}/solr/)
+{% endif -%}
+
+### Development environment cleanup
+
+To stop the development environment, run `ws disable`.
+
+To start the development environment again, run `ws enable`.
+
+To remove the development environment, run `ws destroy`.
+
+### Frontend
+
+The frontend build should be automatically done as part of bringing up the environment.
+
+To trigger a rebuild, run `ws frontend build`.
+
+To watch for changes, run `ws frontend watch`.
+
+To gain access to the `console` container where the builds happen: `ws frontend console`.
+
+### Harness Version Updates
+
+If you have been notified that a harness version upgrade is available by your team, do the following.
+
+If you have an existing environment running:
+```bash
+ws harness update existing
+```
+
+or if you don't have one running right now or would like to set up from fresh:
+```bash
+ws harness update fresh
+```
+
+{% for readme_block in @('framework.readme_blocks') %}
+{% include blocks ~ readme_block ~ '.md.twig' %}
+{% endfor %}
+
+{% if @('services.mysql.enabled') -%}
+### MySQL Access
+
+MySQL can be used either via command line tools via `ws db console` or via GUI tools.
+
+In your GUI tool, set up a new connection to localhost with the port being the returned port number from:
+```bash
+ws port mysql
+```
+
+{% if @('database.port_forward') == "" -%}
+This port will change each time the project environment is started, as docker will allocate a random unused port
+on your host machine.
+
+To set a consistent port for this project, choose a port number that you think will be unique across all projects
+that your developers will encounter (e.g. not 3306!). Acceptable range of ports is 1-65535.
+
+Once you have a port number, you can define it in the workspace.yml with:
+```yaml
+attribute('database.port_forward'): portNumberHere
+```
+{%- endif %}
+
+The connection username and password is listed under the `mysql` service environment section in `docker-compose.yml` in
+the project root.
+{% endif %}
+
+### Performance on macOS
+
+Page load times with Docker Desktop for Mac can vary considerably due to the sharing of files from the macOS disk to the small
+virtual machine that docker is running inside.
+This is especially so when there is a large quantity of small files, such as with a large composer node_modules or
+vendor folder.
+
+[Mutagen](https://mutagen.io/documentation/transports/docker) is a tool to synchronise files between host machine and
+docker containers.
+It enables production-like performance at the cost of having to synchronise files with an intermediate
+"data" container.
+
+{% if @('mutagen') %}
+Mutagen is enabled on the development environment.
+{% else %}
+If it takes over 2 seconds to load a page, you should consider enabling mutagen by adding the following
+to `workspace.override.yml` in the project root, or after testing it and the whole team would like to use it,
+`workspace.yml` in the project root:
+
+```yaml
+attribute('mutagen'): true
+```
+
+Then running `ws harness prepare && ws disable && ws enable`.
+The initial sync can take between 5 to 15 minutes, depending on the size of the project directory.
+
+If committing the attribute changes to `workspace.yml`, ensure the `Performance on macOS` section from
+`.my127ws/application/skeleton/README.md` is copied to the project's README.md too!
+{% endif %}
+
+The following are some useful commands regarding Mutagen:
+```bash
+# To check the Mutagen sync status (sync is ready when status is "Watching for changes")
+mutagen monitor
+# To debug a sync error
+mutagen list
+```
+
+### Common Issues
+
+As setup issues are encountered please detail with step by step fix instructions, and where possible update the project or the upstream workspace harness itself to provide a more permanent fix.
+
+* If you get a error that the TLS certificate has expired for the development website in your browser:
+  * Restart the my127 global traefik proxy with `ws global service proxy restart`.
+    This will fetch new TLS certificates for `*.my127.site`.
+* If you use mutagen and operations such as `mutagen project pause` during `ws disable` or `mutagen daemon start` during `ws install` are hanging:
+  * Check that your `mutagen version` is at least version 0.11.8, and upgrade mutagen if not.
+
+# License
+
+Copyright 2020, Inviqa

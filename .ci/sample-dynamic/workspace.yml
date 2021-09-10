@@ -1,0 +1,22 @@
+workspace('ci-docker-sample-dynamic'):
+  description: generated local workspace for ci-docker-sample.
+  harness: inviqa/docker
+
+attributes:
+  services:
+    chrome:
+      enabled: true
+    mysql:
+      enabled: true
+
+  aws:
+    repository: null
+    access_key_id: null
+    secret_access_key: null
+    s3:
+      bucket: null
+
+attribute('docker.port_forward.enabled'): false
+
+attribute('pipeline.base.ingress.annotations'):
+  example_nginx: test

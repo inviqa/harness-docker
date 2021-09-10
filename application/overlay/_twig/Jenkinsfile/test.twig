@@ -1,0 +1,10 @@
+        stage('Test')  {
+            parallel {
+{% if not @('jenkins.tests.isolated') %}
+{% if @('services.lighthouse.enabled') %}
+                stage('lighthouse') { steps { sh 'ws lighthouse' } }
+{% endif %}
+{% endif %}
+                stage('helm kubeval qa')  { steps { sh 'ws helm kubeval --cleanup qa' } }
+            }
+        }

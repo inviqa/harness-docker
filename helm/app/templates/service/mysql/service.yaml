@@ -1,0 +1,19 @@
+{{ if .Values.services.mysql.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "chart.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: mysql
+    app.service: {{ .Release.Name }}-mysql
+  name: {{ .Release.Name }}-mysql
+spec:
+  ports:
+  - name: "3306"
+    port: 3306
+    targetPort: 3306
+  selector:
+    app.service: {{ .Release.Name }}-mysql
+status:
+  loadBalancer: {}
+{{ end }}

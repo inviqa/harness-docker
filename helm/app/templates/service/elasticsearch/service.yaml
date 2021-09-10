@@ -1,0 +1,19 @@
+{{ if .Values.services.elasticsearch.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "chart.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: elasticsearch
+    app.service: {{ .Release.Name }}-elasticsearch
+  name: {{ .Release.Name }}-elasticsearch
+spec:
+  ports:
+  - name: "9200"
+    port: 9200
+    targetPort: 9200
+  selector:
+    app.service: {{ .Release.Name }}-elasticsearch
+status:
+  loadBalancer: {}
+{{ end }}

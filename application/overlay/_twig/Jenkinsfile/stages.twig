@@ -1,0 +1,14 @@
+{% set blocks  = 'application/overlay/_twig/Jenkinsfile/' %}
+
+{% if @('jenkins.tests.isolated') %}
+{% include blocks ~ 'setup.twig' %}
+{% include blocks ~ 'test.twig' %}
+{% include blocks ~ 'build.twig' %}
+{% include blocks ~ 'test-end-to-end.twig' %}
+{% else %}
+{% include blocks ~ 'build.twig' %}
+{% include blocks ~ 'test.twig' %}
+{% endif %}
+
+{% include blocks ~ 'publish.twig' %}
+{% include blocks ~ 'deploy.twig' %}

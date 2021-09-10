@@ -1,0 +1,22 @@
+workspace('ci-docker-sample-static'):
+  description: generated local workspace for ci-docker-sample.
+  harness: inviqa/docker
+
+attribute('app.build'): static
+
+attributes:
+  services:
+    chrome:
+      enabled: true
+    mysql:
+      enabled: true
+
+  aws:
+    repository: null
+    access_key_id: null
+    secret_access_key: null
+    s3:
+      bucket: null
+
+attribute('mysql.tag'): 8
+attribute('database.platform_version'): 8.0

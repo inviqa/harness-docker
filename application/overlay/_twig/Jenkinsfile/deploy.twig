@@ -1,0 +1,22 @@
+{% if @('pipeline.qa.enabled') %}
+        stage('Deploy (QA)') {
+{% if @('pipeline.qa.environment') %}
+            environment {
+{% for key, value in @('pipeline.qa.environment') %}
+                {{ key }} = {{ value }}
+{% endfor %}
+            }
+{% endif %}
+            when {
+                not { triggeredBy 'TimerTrigger' }
+                branch '{{ @('pipeline.qa.branch') }}'
+            }
+            steps {
+                milestone(100)
+                lock(resource: '{{ @('workspace.name') }}-qa-deploy', inversePrecedence: true) {
+                    milestone(101)
+                    sh 'ws app deploy qa'
+                }
+            }
+        }
+{% endif %}

@@ -1,0 +1,113 @@
+attributes:
+  services:
+    console:
+      enabled: true
+      build:
+        from: debian:buster-slim
+        environment: {}
+      environment:
+        HOST_OS_FAMILY: = @('host.os')
+      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-console'
+      publish: true
+    elasticsearch:
+      image: = @('elasticsearch.image') ~ ':' ~ @('elasticsearch.tag')
+      resources:
+        memory: "1024Mi"
+    lighthouse:
+      image: quay.io/inviqa_images/lighthouse:latest
+    memcached:
+      image: memcached:1-alpine
+    mongodb:
+      image: mongo:4.4
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: admin
+      environment_secrets:
+        MONGO_INITDB_ROOT_PASSWORD: password
+      resources:
+        memory: "512Mi"
+    mysql:
+      image: = @('mysql.image') ~ ':' ~ @('mysql.tag')
+      options: = @('database.var')
+      environment:
+        MYSQL_DATABASE: = @('database.name')
+        MYSQL_USER: = @('database.user')
+      environment_secrets:
+        MYSQL_PASSWORD: = @('database.pass')
+        MYSQL_ROOT_PASSWORD: = @('database.root_pass')
+      resources:
+        memory: "512Mi"
+    postgres:
+      image: postgres:9.6
+      environment:
+        POSTGRES_DB: = @('database.name')
+        POSTGRES_USER: = @('database.user')
+        PGDATA: /var/lib/postgresql/data/pgdata
+      environment_secrets:
+        POSTGRES_PASSWORD: = @('database.pass')
+      resources:
+        memory: "512Mi"
+    rabbitmq:
+      image: = @('rabbitmq.image') ~ ':' ~ @('rabbitmq.tag')
+      environment:
+        RABBITMQ_DEFAULT_USER: = @('rabbitmq.user')
+        RABBITMQ_DEFAULT_VHOST: = @('rabbitmq.vhosts.default')
+      environment_secrets:
+        RABBITMQ_DEFAULT_PASS: = @('rabbitmq.password')
+        RABBITMQ_ERLANG_COOKIE: = @('rabbitmq.erlang_cookie')
+      resources:
+        memory: "1024Mi"
+    redis:
+      image: redis:5-alpine
+      resources:
+        memory: "256Mi"
+    redis-session:
+      image: redis:5-alpine
+      resources:
+        memory: "1024Mi"
+    relay:
+      enabled: true
+      publish: false
+    solr:
+      config_path: ""
+      environment:
+        SOLR_CORE_NAME: collection1
+      environment_secrets: {}
+      host: solr
+      image: "= @('services.solr.major_version') != 4 ? 'solr:' ~ @('services.solr.major_version') ~ '-slim' : 'quay.io/inviqa_images/solr4:latest'"
+      major_version: 8
+      port: 8983
+    varnish:
+      image: varnish:6
+      environment:
+        VARNISH_SIZE: "1024M"
+      resources:
+        memory: "1124Mi"
+  pipeline:
+    base:
+      prometheus:
+        podMonitoring: false
+      services:
+        mysql:
+          options: = @('services.mysql.options')
+        relay:
+          enabled: false
+    production:
+      services: {}
+    qa:
+      services: {}
+    preview:
+      services:
+        elasticsearch:
+          resources:
+            memory: "1024Mi"
+        mysql:
+          resources:
+            memory: "512Mi"
+        postgres:
+          resources:
+            memory: "512Mi"
+        redis:
+          resources:
+            memory: "64Mi"
+        redis-session:
+          resources:

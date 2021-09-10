@@ -1,0 +1,7 @@
+        stage('End-to-end Test') {
+            parallel {
+{% if @('services.lighthouse.enabled') %}
+                stage('lighthouse') { steps { sh 'ws lighthouse' } }
+{% endif %}
+            }
+        }

@@ -1,0 +1,8 @@
+        stage('Setup') {
+            steps {
+                sh 'ws harness download'
+                sh 'ws harness prepare'
+                sh 'ws enable console'
+                milestone(10)
+            }
+        }

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+run_steps()
+{
+    # run any command required to be executed at docker startup
+    {% for step in @('console.entrypoint.steps') -%}
+    {{ step|raw }}
+    {% else -%}
+    :
+    {% endfor %}
+}
+
+bootstrap()
+{
+    run_steps
+}
+
+bootstrap
+
+if [ "${1:-}" == "sleep" ]; then
+    exec /sbin/tini -- bash -c "$(printf "%q " "$@")"
+else
+    exec /sbin/tini -- "$@"
+fi
