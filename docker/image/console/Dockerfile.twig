@@ -2,6 +2,8 @@ FROM {{ @('services.console.build.from') }}
 
 COPY .my127ws/docker/image/console/root /
 RUN useradd build \
+ && mkdir -p /app \
+ && chown -R build:build /home/build /app \
  && apt-get update && apt-get install --no-install-recommends -y ca-certificates curl rsync \
  && apt-get auto-remove -qq -y \
  && apt-get clean \
