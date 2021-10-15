@@ -97,8 +97,6 @@ dynamic_console()
 
 dynamic()
 {
-    ws external-images pull
-
     dynamic_console
 
     passthru "ws app build"
@@ -114,7 +112,6 @@ static_console()
 
 static()
 {
-    ws external-images pull
     ws app build
 }
 
