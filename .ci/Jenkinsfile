@@ -23,29 +23,32 @@ pipeline {
                 milestone(10)
             }
         }
-        stage('Tests') {
-            matrix {
-                axes {
-                    axis {
-                        name 'MODE'
-                        values 'static', 'dynamic', 'dynamic mutagen'
-                    }
+        stage('Quality Tests') {
+            environment {
+                TEARDOWN_ENVIRONMENT = "no"
+                TEST_MODE = "quality"
+            }
+            steps {
+                sh '.ci/test static'
+                sh '.ci/test dynamic'
+                sh '.ci/test dynamic mutagen'
+                milestone(20)
+            }
+        }
+        stage('Acceptance Tests') {
+            environment {
+                REUSE_EXISTING_WORKSPACE = "yes"
+                TEST_MODE = "acceptance"
+            }
+            stages {
+                stage('Static') {
+                    steps { sh '.ci/test static' }
                 }
-                stages {
-                    stage('Quality') {
-                        environment {
-                            TEARDOWN_ENVIRONMENT = "no"
-                            TEST_MODE = "quality"
-                        }
-                        steps { sh '.ci/test $MODE' }
-                    }
-                    stage('Acceptance') {
-                        environment {
-                            REUSE_EXISTING_WORKSPACE = "yes"
-                            TEST_MODE = "acceptance"
-                        }
-                        steps { sh '.ci/test $MODE' }
-                    }
+                stage('Dynamic') {
+                    steps { sh '.ci/test dynamic' }
+                }
+                stage('Mutagen') {
+                    steps { sh '.ci/test dynamic mutagen' }
                 }
             }
         }
