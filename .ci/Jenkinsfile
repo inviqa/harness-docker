@@ -1,0 +1,64 @@
+pipeline {
+    agent {
+        docker {
+            label 'my127ws'
+            alwaysPull true
+            image 'quay.io/inviqa_images/workspace:latest'
+            args '--entrypoint "" --volume /var/run/docker.sock:/var/run/docker.sock --volume "$HOME/.my127:/root/.my127"'
+        }
+    }
+    environment {
+        COMPOSE_DOCKER_CLI_BUILD = 1
+        DOCKER_BUILDKIT = 1
+        MY127WS_KEY = credentials('base-my127ws-key-20190523')
+    }
+    options {
+        buildDiscarder(logRotator(daysToKeepStr: '30'))
+        parallelsAlwaysFailFast()
+    }
+    triggers { cron(env.BRANCH_NAME ==~ /^(master|main|\d+\.\d+\.x)$/ ? 'H H(0-6) * * *' : '') }
+    stages {
+        stage('Quality Checks') {
+            steps {
+                sh '.ci/quality'
+                milestone(10)
+            }
+        }
+        stage('Quality Tests') {
+            environment {
+                TEARDOWN_ENVIRONMENT = "no"
+                TEST_MODE = "quality"
+            }
+            steps {
+                sh '.ci/test static'
+                sh '.ci/test dynamic'
+                sh '.ci/test dynamic mutagen'
+            }
+        }
+        stage('Install Mutagen') {
+            steps {
+                sh 'apk add grep'
+                sh 'curl --fail --silent --show-error --location --output /tmp/mutagen.tar.gz https://github.com/mutagen-io/mutagen/releases/download/v0.11.8/mutagen_linux_amd64_v0.11.8.tar.gz'
+                sh 'tar -C /usr/local/bin/ -xf /tmp/mutagen.tar.gz'
+                sh 'rm -f /tmp/mutagen.tar.gz'
+            }
+        }
+        stage('Acceptance Tests') {
+            environment {
+                REUSE_EXISTING_WORKSPACE = "yes"
+                TEST_MODE = "acceptance"
+            }
+            stages {
+                stage('Static') {
+                    steps { sh '.ci/test static' }
+                }
+                stage('Dynamic') {
+                    steps { sh '.ci/test dynamic' }
+                }
+                stage('Mutagen') {
+                    steps { sh '.ci/test dynamic mutagen' }
+                }
+            }
+        }
+    }
+}
