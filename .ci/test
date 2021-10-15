@@ -119,9 +119,9 @@ function check_environment_started()
 
 function run_project_quality_tests()
 (
-  cd "${path_test}"
+    cd "${path_test}"
 
-  ws helm kubeval --cleanup qa
+    ws helm kubeval --cleanup qa
 )
 
 function run_project_acceptance_tests()
