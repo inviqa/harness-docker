@@ -2,7 +2,7 @@ FROM {{ @('services.console.build.from') }}
 
 COPY .my127ws/docker/image/console/root /
 RUN useradd build \
- && apt-get update && apt-get install --no-install-recommends -y rsync \
+ && apt-get update && apt-get install --no-install-recommends -y curl rsync \
  && apt-get auto-remove -qq -y \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* \
