@@ -75,6 +75,8 @@ command('helm kubeval [--cleanup] <chart-path>'):
     cd "${CHART_PATH}"
     passthru helm dependency build
 
+    mkdir -p "${HELM_HOME:-$HOME}/.helm/plugins/"
+
     if readlink "${HELM_HOME:-$HOME}/.helm/plugins/helm-kubeval" | grep '/https-github.com-instrumenta-helm-kubeval$' >/dev/null; then
       passthru helm plugin remove kubeval
     fi
