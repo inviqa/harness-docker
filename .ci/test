@@ -62,6 +62,8 @@ function test_harness_acceptance()
     local mode="$1"
     local sync="$2"
 
+    install_console
+    run_project_quality_tests
     install_environment
     check_environment_started "$mode"
     run_project_acceptance_tests
