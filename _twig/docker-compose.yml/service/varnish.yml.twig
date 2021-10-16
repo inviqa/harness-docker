@@ -14,7 +14,7 @@
       @('services.varnish.environment_secrets')
       ]), 2, 6) | raw }}
     links:
-      - nginx:nginx
+      - {{ @('varnish.target_service') }}:{{ @('varnish.target_service') }}
     volumes:
       - .my127ws/docker/image/varnish/root/etc/varnish/default.vcl:/etc/varnish/default.vcl:ro
       - type: tmpfs
