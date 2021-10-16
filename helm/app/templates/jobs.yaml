@@ -1,4 +1,4 @@
-{{{- range $serviceName := (.Values.services | keys) -}}
+{{- range $serviceName := (.Values.services | keys) -}}
 {{- $service := include "service.resolved" (dict "root" $ "service_name" $serviceName) | fromYaml -}}
 {{- if and (not (hasPrefix "." $serviceName)) $service.jobs -}}
 {{- range $jobName, $jobConfig := $service.jobs }}
