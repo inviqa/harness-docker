@@ -123,7 +123,7 @@ function run_project_quality_tests()
 (
     cd "${path_test}"
 
-    ws helm kubeval --cleanup qa
+    ws helm kubeval --cleanup app
 )
 
 function run_project_acceptance_tests()
