@@ -32,6 +32,7 @@ pipeline {
                 sh '.ci/test static'
                 sh '.ci/test dynamic'
                 sh '.ci/test dynamic mutagen'
+                sh '.ci/test static-all-services'
                 milestone(20)
             }
         }
@@ -49,6 +50,9 @@ pipeline {
                 }
                 stage('Mutagen') {
                     steps { sh '.ci/test dynamic mutagen' }
+                }
+                stage('Static All Services') {
+                    steps { sh '.ci/test static-all-services' }
                 }
             }
         }
