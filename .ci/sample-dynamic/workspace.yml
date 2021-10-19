@@ -2,6 +2,8 @@ workspace('ci-docker-sample-dynamic'):
   description: generated local workspace for ci-docker-sample.
   harness: inviqa/docker
 
+harness.repository.source('name'): ./harnesses.json
+
 attributes:
   services:
     chrome:

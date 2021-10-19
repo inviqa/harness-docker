@@ -1,4 +1,4 @@
-workspace('ci-docker-sample-static'):
+workspace('ci-docker-sample-static-all-services'):
   description: generated local workspace for ci-docker-sample.
   harness: inviqa/docker
 
@@ -10,7 +10,25 @@ attributes:
   services:
     chrome:
       enabled: true
+    elasticsearch:
+      enabled: true
+    memcached:
+      enabled: true
+    mongodb:
+      enabled: true
     mysql:
+      enabled: true
+    postgres:
+      enabled: true
+    rabbitmq:
+      enabled: true
+    redis-session:
+      enabled: true
+    redis:
+      enabled: true
+    solr:
+      enabled: true
+    varnish:
       enabled: true
 
   aws:
@@ -22,3 +40,5 @@ attributes:
 
 attribute('mysql.tag'): 8
 attribute('database.platform_version'): 8.0
+
+attribute('varnish.target_service'): elasticsearch
