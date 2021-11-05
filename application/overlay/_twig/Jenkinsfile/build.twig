@@ -2,6 +2,10 @@
             steps {
 {% if @('jenkins.tests.use_global_services') %}
                 sh 'ws install'
+{% elseif not @('jenkins.tests.isolated') %}
+                sh 'ws harness download'
+                sh 'ws harness prepare'
+                sh 'ws enable'
 {% else %}
                 sh 'ws enable'
 {% endif %}
