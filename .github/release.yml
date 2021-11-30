@@ -3,7 +3,7 @@ changelog:
     - title: Breaking Changes
       labels:
         - breaking-change
-    - title: Implemented Enhancements
+    - title: Implemented enhancements
       labels:
         - enhancement
     - title: Fixed bugs
