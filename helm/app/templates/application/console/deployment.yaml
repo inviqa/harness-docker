@@ -26,18 +26,24 @@ spec:
       containers:
       - env:
         {{- range $key, $value := (mergeOverwrite (dict) .environment .environment_dynamic) }}
-        {{- $tp := typeOf $value }}
         - name: {{ $key | quote }}
-        {{- if eq $tp "string" }}
+        {{- if kindIs "string" $value }}
           value: {{ tpl $value $ | quote }}
-        {{- else}}
+        {{- else if kindIs "map" $value }}
+          {{ tpl ($value | toYaml) $ | nindent 10 }}
+        {{- else }}
           value: {{ $value | quote }}
         {{- end }}
         {{- end }}
-        {{- if .environment_secrets }}
+        {{- if or .environment_secrets .envFrom }}
         envFrom:
+          {{- if .environment_secrets }}
           - secretRef:
               name: {{ $.Release.Name }}-console
+          {{- end }}
+          {{- with .envFrom }}
+          {{- tpl (. | toYaml) | nindent 10 }}
+          {{- end }}
         {{- end }}
         image: {{ .image }}
         imagePullPolicy: Always
