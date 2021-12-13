@@ -16,7 +16,8 @@ attributes:
       resources:
         memory: "1024Mi"
     lighthouse:
-      image: quay.io/inviqa_images/lighthouse:latest
+      image: = 'quay.io/inviqa_images/lighthouse:' ~ @('services.lighthouse.tag')
+      tag: "= host_architecture() == 'amd64' ? 'chrome' : 'chromium'"
     memcached:
       image: memcached:1-alpine
     mongodb:
