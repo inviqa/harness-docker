@@ -51,7 +51,9 @@ spec:
           {{- end }}
           image: {{ .image | quote }}
           imagePullPolicy: Always
-          command: {{ $jobConfig.command | toJson }}
+          {{- with (pick $jobConfig "command" "args") }}
+          {{- . | toYaml | nindent 10 }}
+          {{- end }}
           resources:
             limits:
               memory: {{ ($jobConfig.resources | default (dict)).memory | default $service.resources.memory }}
