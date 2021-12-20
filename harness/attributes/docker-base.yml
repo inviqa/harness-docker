@@ -1,4 +1,5 @@
 attributes:
+  configMaps: {}
   services:
     console:
       enabled: true

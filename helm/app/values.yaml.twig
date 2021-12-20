@@ -12,6 +12,10 @@ services: {{ to_nice_yaml(deep_merge([
     @('pipeline.base.services')
   ]), 2, 2) | raw }}
 
+configMaps: {{ to_nice_yaml(@('pipeline.base.configMaps'), 2, 2) | raw }}
+
+secrets: {}
+
 replicas: {{ to_nice_yaml(@('replicas'), 2, 2) | raw }}
 
 persistence: {{ to_nice_yaml(@('pipeline.base.persistence'), 2, 2) | raw }}
