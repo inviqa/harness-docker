@@ -64,7 +64,9 @@ spec:
               {{- end }}
               image: {{ .image | quote }}
               imagePullPolicy: Always
-              command: {{ $cronConfig.command | toJson }}
+              {{- with (pick $cronConfig "command" "args") }}
+              {{- . | toYaml | nindent 10 }}
+              {{- end }}
               resources:
                 limits:
                   memory: {{ ($cronConfig.resources | default (dict)).memory | default $service.resources.memory }}
