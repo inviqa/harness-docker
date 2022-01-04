@@ -9,9 +9,6 @@ app.kubernetes.io/version: {{ .Values.appVersion | default .Chart.AppVersion | q
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 
-{{- define "application.resourcePrefix" -}}
-{{- end -}}
-
 {{/*
 Common selectors
 */}}
@@ -64,7 +61,7 @@ apiVersion: v1
 kind: Secret
 {{ end }}
 metadata:
-  name: {{ .root.Values.resourcePrefix }}{{ .service_name }}
+  name: {{ print .root.Release.Name "-" .service_name }}
   labels:
     {{- include "chart.labels" .root | nindent 4 }}
     app.kubernetes.io/component: {{ .component | default .service_name }}
