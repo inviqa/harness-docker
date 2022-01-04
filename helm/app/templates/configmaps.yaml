@@ -9,5 +9,8 @@ metadata:
     {{- if $config.labels }}
     {{- $config.labels | toYaml | nindent 4 }}
     {{- end }}
-{{ tpl (pick $config "data") $ | toYaml }}
+data:
+{{- range $key, $value := $config.data }}
+  {{ print ($key | quote) ": " (tpl $value $ | quote) }}
+{{- end }}
 {{- end }}
