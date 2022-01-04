@@ -10,7 +10,7 @@ metadata:
     {{- $config.labels | toYaml | nindent 4 }}
     {{- end }}
 data:
-{{ range $key, $value := $config.data }}
+{{- range $key, $value := $config.data }}
   {{ print ($key | quote) ": " (tpl $value $ | quote) }}
 {{- end }}
 {{- end }}
