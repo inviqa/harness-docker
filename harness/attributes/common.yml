@@ -28,7 +28,6 @@ attributes.default:
   pipeline:
     base:
       persistence: = @('persistence')
-      resourcePrefix: ~
       hostname:  = @('pipeline.preview.hostname')
     publish:
       enabled: false
@@ -79,7 +78,6 @@ attributes.default:
         name: null
       namespace: = @('workspace.name') ~ '-' ~ 'qa'
       hostname: = @('pipeline.qa.namespace') ~ '.example.com'
-      resourcePrefix: ~
       persistence: ~
       rabbitmq:
         external_host: = 'rabbitmq-' ~ @('pipeline.qa.hostname')
