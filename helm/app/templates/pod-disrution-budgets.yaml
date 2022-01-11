@@ -1,7 +1,7 @@
 {{- range $serviceName := (.Values.services | keys) -}}
 {{- $service := include "service.resolved" (dict "root" $ "service_name" $serviceName) | fromYaml -}}
 {{- with $service }}
-{{- if and (not (hasPrefix "." $serviceName)) .enabled (hasKey . "disruptionBudget") -}}
+{{- if and (not (hasPrefix "." $serviceName)) .enabled (hasKey . "disruptionBudget") }}
 ---
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
