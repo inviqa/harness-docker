@@ -1,0 +1,23 @@
+{{- range $serviceName := (.Values.services | keys) -}}
+{{- $service := include "service.resolved" (dict "root" $ "service_name" $serviceName) | fromYaml -}}
+{{- with $service }}
+{{- if and (not (hasPrefix "." $serviceName)) .enabled (hasKey . "disruptionBudget") }}
+---
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ print $.Release.Name "-" $serviceName }}
+  labels:
+    {{- include "chart.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $serviceName }}
+    app.service: {{ print $.Release.Name "-" $serviceName }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "15"
+spec:
+  {{- pick .disruptionBudget "minAvailable" "maxAvailable" | toYaml | nindent 2 }}
+  selector:
+    matchLabels:
+      app.service: {{ print $.Release.Name "-" $serviceName }}
+{{- end }}
+{{- end }}
+{{- end }}
