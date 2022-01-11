@@ -1,7 +1,8 @@
 {{- range $serviceName := (.Values.services | keys) -}}
 {{- $service := include "service.resolved" (dict "root" $ "service_name" $serviceName) | fromYaml -}}
 {{- with $service }}
-{{- if and (not (hasPrefix "." $serviceName)) .enabled .autoscaling .autoscaling.enabled }}
+{{- $autoscaling := .autoscaling | default (dict) -}}
+{{- if and (not (hasPrefix "." $serviceName)) .enabled $autoscaling.enabled }}
 ---
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
@@ -14,7 +15,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "15"
 spec:
-  {{- with (omit .autoscaling "enabled") }}
+  {{- with (omit $autoscaling "enabled") }}
   {{- . | toYaml | nindent 2 }}
   {{- end }}
   scaleTargetRef:
