@@ -54,7 +54,7 @@ spec:
                 name: {{ print $.Release.Name "-" $serviceName }}
             {{- end }}
             {{- with .envFrom }}
-            {{- tpl (. | toYaml) | nindent 12 }}
+            {{- tpl (. | toYaml) $ | nindent 12 }}
             {{- end }}
           {{- end }}
           image: {{ .image | quote }}
