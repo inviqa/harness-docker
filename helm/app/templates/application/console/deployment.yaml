@@ -42,7 +42,7 @@ spec:
               name: {{ $.Release.Name }}-console
           {{- end }}
           {{- with .envFrom }}
-          {{- tpl (. | toYaml) | nindent 10 }}
+          {{- tpl (. | toYaml) $ | nindent 10 }}
           {{- end }}
         {{- end }}
         image: {{ .image }}
