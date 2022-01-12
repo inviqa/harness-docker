@@ -64,9 +64,9 @@ spec:
           {{- end }}
           resources:
             limits:
-              memory:  {{ .resources.memory }}
+              memory: {{ .resources.memory }}
             requests:
-              memory:  {{ .resources.memory }}
+              memory: {{ .resources.memory }}
           {{- with .volumes }}
           volumeMounts:
             {{- range . }}
