@@ -2,6 +2,7 @@
 {{- $service := include "service.resolved" (dict "root" $ "service_name" $serviceName) | fromYaml -}}
 {{- if and (not (hasPrefix "." $serviceName)) $service.jobs -}}
 {{- range $jobName, $jobConfig := $service.jobs }}
+{{- with (mergeOverwrite (deepCopy $service) (deepCopy $jobConfig))}}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -32,7 +33,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: app
-          {{- with $service.environment }}
+          {{- with .environment }}
           env:
           {{- range $key, $value := . }}
             {{- $tp := typeOf $value }}
@@ -46,9 +47,9 @@ spec:
             {{- end }}
           {{- end }}
           {{- end }}
-          {{- if or .environment_secrets .envFrom }}
+          {{- if or $service.environment_secrets .envFrom }}
           envFrom:
-            {{- if .environment_secrets }}
+            {{- if $service.environment_secrets }}
             - secretRef:
                 name: {{ print $.Release.Name "-" $serviceName }}
             {{- end }}
@@ -63,10 +64,10 @@ spec:
           {{- end }}
           resources:
             limits:
-              memory: {{ ($jobConfig.resources | default (dict)).memory | default $service.resources.memory }}
+              memory: {{ .resources.memory }}
             requests:
-              memory: {{ ($jobConfig.resources | default (dict)).memory | default $service.resources.memory }}
-          {{- with $jobConfig.volumes | default $service.volumes }}
+              memory: {{ .resources.memory }}
+          {{- with .volumes }}
           volumeMounts:
             {{- range . }}
             - {{ tpl (toYaml (pick . "name" "mountPath" "readOnly")) $ | nindent 16 }}
@@ -81,12 +82,13 @@ spec:
       {{- if $service.serviceAccountName }}
       serviceAccountName: {{ tpl $service.serviceAccountName $ | quote }}
       {{- end }}
-      {{- with $jobConfig.volumes | default $service.volumes }}
+      {{- with .volumes }}
       volumes:
         {{- range . }}
         - {{ tpl (toYaml (omit . "mountPath" "readOnly")) $ | nindent 12 }}
         {{- end }}
       {{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
