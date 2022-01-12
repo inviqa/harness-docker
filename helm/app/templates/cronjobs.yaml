@@ -2,6 +2,7 @@
 {{- $service := include "service.resolved" (dict "root" $ "service_name" $serviceName) | fromYaml -}}
 {{- if and (not (hasPrefix "." $serviceName)) $service.cronjobs -}}
 {{- range $cronName, $cronConfig := $service.cronjobs }}
+{{- with (mergeOverwrite (deepCopy $service) (deepCopy $cronConfig)) }}
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -39,9 +40,9 @@ spec:
           restartPolicy: Never
           containers:
             - name: app
-              {{- with $service.environment }}
+              {{- with .environment }}
               env:
-              {{- range $key, $value := $service.environment }}
+              {{- range $key, $value := . }}
                 - name: {{ $key | quote }}
                 {{- if kindIs "string" $value }}
                   value: {{ tpl $value $ | quote }}
@@ -52,9 +53,9 @@ spec:
                 {{- end }}
               {{- end }}
               {{- end }}
-              {{- if or .environment_secrets .envFrom }}
+              {{- if or $service.environment_secrets .envFrom }}
               envFrom:
-                {{- if .environment_secrets }}
+                {{- if $service.environment_secrets }}
                 - secretRef:
                     name: {{ print $.Release.Name "-" $serviceName }}
                 {{- end }}
@@ -69,10 +70,10 @@ spec:
               {{- end }}
               resources:
                 limits:
-                  memory: {{ ($cronConfig.resources | default (dict)).memory | default $service.resources.memory }}
+                  memory: {{ .resources.memory }}
                 requests:
-                  memory: {{($cronConfig.resources | default (dict)).memory | default $service.resources.memory }}
-              {{- with $cronConfig.volumes | default $service.volumes }}
+                  memory: {{ .resources.memory }}
+              {{- with .volumes }}
               volumeMounts:
                 {{- range . }}
                 - {{ tpl (toYaml (pick . "name" "mountPath" "readOnly")) $ | nindent 16 }}
@@ -86,12 +87,13 @@ spec:
           {{- if $service.serviceAccountName }}
           serviceAccountName: {{ tpl $service.serviceAccountName $ | quote }}
           {{- end }}
-          {{- with $cronConfig.volumes | default $service.volumes }}
+          {{- with .volumes }}
           volumes:
             {{- range . }}
             - {{ tpl (toYaml (omit . "mountPath" "readOnly")) $ | nindent 12 }}
             {{- end }}
           {{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
