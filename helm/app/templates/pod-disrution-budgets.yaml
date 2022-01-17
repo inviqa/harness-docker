@@ -16,7 +16,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "15"
 spec:
-  minAvailable: {{- .minAvailable | default 1 }}
+  minAvailable: {{ .minAvailable | default 1 }}
   selector:
     matchLabels:
       app.service: {{ print $.Release.Name "-" $serviceName }}
