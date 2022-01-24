@@ -34,7 +34,7 @@ attributes.default:
       enabled: false
       services: = publishable_services(@('services'))
       # branches that should publish (other than change requests and qa)
-      # use '*' if required to publish all branches
+      # use ANT glob syntax to match multiple branches
       branches:
         - = @('git.default_branch')
       # For defining environment variables in Jenkins, e.g. loading up docker username/password from a Jenkins
