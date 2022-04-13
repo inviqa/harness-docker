@@ -4,7 +4,11 @@
 {{- range $cronName, $cronConfig := $service.cronjobs }}
 {{- with (mergeOverwrite (deepCopy $service) (deepCopy $cronConfig)) }}
 ---
+{{- if semverCompare ">=1.21-0" $.Capabilities.KubeVersion.Version }}
+apiVersion: batch/v1
+{{- else }}
 apiVersion: batch/v1beta1
+{{- end }}
 kind: CronJob
 metadata:
   name: {{ print $.Release.Name "-" $cronName }}
