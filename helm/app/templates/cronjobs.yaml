@@ -4,7 +4,7 @@
 {{- range $cronName, $cronConfig := $service.cronjobs }}
 {{- with (mergeOverwrite (deepCopy $service) (deepCopy $cronConfig)) }}
 ---
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ print $.Release.Name "-" $cronName }}
