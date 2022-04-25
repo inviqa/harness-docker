@@ -75,14 +75,20 @@ attributes:
       enabled: true
       publish: false
     solr:
+      publish: "= @('services.solr.enabled')"
+      build:
+        image: "= @('services.solr.major_version') != 4 ? 'solr:' ~ @('services.solr.major_version') ~ '-slim' : 'quay.io/inviqa_images/solr4:latest'"
+      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-solr'
       config_path: ""
       environment:
         SOLR_CORE_NAME: collection1
+        SOLR_VOLUME_DIR: "=@('services.solr.major_version') == 4 ? '/opt/solr/example/solr' : (@('services.solr.major_version') < 8 ? '/opt/solr/server/solr/mycores' : '/var/solr')"
       environment_secrets: {}
       host: solr
-      image: "= @('services.solr.major_version') != 4 ? 'solr:' ~ @('services.solr.major_version') ~ '-slim' : 'quay.io/inviqa_images/solr4:latest'"
       major_version: 8
       port: 8983
+      resources:
+        memory: "512Mi"
     varnish:
       image: varnish:6
       environment:

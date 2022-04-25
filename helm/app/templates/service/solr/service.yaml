@@ -1,0 +1,17 @@
+{{- if .Values.services.solr.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "chart.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: solr
+    app.service: {{ .Release.Name }}-solr
+  name: {{ .Release.Name }}-solr
+spec:
+  ports:
+  - name: solr
+    port: 8983
+    targetPort: 8983
+  selector:
+    app.service: {{ .Release.Name }}-solr
+{{- end }}

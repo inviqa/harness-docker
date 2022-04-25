@@ -12,6 +12,7 @@ confd('harness:/'):
   - { src: docker/image/console/root/lib/task/welcome.sh }
   - { src: docker/image/lighthouse/Dockerfile }
   - { src: docker/image/lighthouse/root/app/run.sh }
+  - { src: docker/image/solr/Dockerfile }
   - { src: docker/image/tls-offload/root/etc/ssl/certs/app.crt }
   - { src: docker/image/tls-offload/root/etc/ssl/private/app.key }
   - { src: docker/image/varnish/root/etc/varnish/default.vcl }
