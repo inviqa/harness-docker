@@ -3,7 +3,7 @@
 To use this harness:
 
 1. Install [Workspace]
-1. Get the release version from [release notes]
+1. Get the release version from [releases page]
 2. Run `ws create <projectName> inviqa/docker:v{release version}`
 3. Fill in project-specific AWS and Github credentials, set as blank if you don't need them
 4. Change to the <projectName> directory: `cd <projectName>`
