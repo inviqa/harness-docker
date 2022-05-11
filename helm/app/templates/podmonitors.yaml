@@ -1,0 +1,21 @@
+{{- range $serviceName := (.Values.services | keys) -}}
+{{- with (include "service.resolved" (dict "root" $ "service_name" $serviceName) | fromYaml) }}
+{{- if and (not (hasPrefix "_" $serviceName)) $.Values.prometheus.podMonitoring (. | dig "metricsEnabled" true) .metricsEndpoints }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: {{ print $.Release.Name "-" $serviceName }}
+  labels:
+    app.service: {{ print $.Release.Name "-" $serviceName }}
+    {{- include "chart.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: {{ $serviceName }}
+spec:
+  selector:
+    matchLabels:
+      app.service: {{ print $.Release.Name "-" $serviceName }}
+  podMetricsEndpoints:
+    {{- .metricsEndpoints | toYaml | nindent 6 }}
+{{- end }}
+{{- end }}
+{{- end }}
