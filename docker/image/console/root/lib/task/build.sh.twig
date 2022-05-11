@@ -1,0 +1,26 @@
+#!/bin/bash
+
+function task_build()
+{
+    set -o errexit
+    set -o nounset
+    set -o pipefail
+
+    if ! [ -f /app/README.md ]; then
+        task skeleton:apply
+    fi
+
+    task overlay:apply
+
+    cd /app
+
+    if {{ @('task.build.when')|raw }}; then 
+        :
+    else
+        return 0;
+    fi
+
+    {% for step in @('task.build.steps') -%}
+    {{ step|raw }}
+    {% endfor %}
+}
