@@ -1,6 +1,6 @@
 {{- range $serviceName := (.Values.services | keys) -}}
 {{- $service := include "service.resolved" (dict "root" $ "service_name" $serviceName) | fromYaml -}}
-{{- if and (not (hasPrefix "." $serviceName)) $service.cronjobs -}}
+{{- if and (not (hasPrefix "_" $serviceName)) $service.cronjobs -}}
 {{- range $cronName, $cronConfig := $service.cronjobs }}
 {{- with (mergeOverwrite (deepCopy $service) (deepCopy $cronConfig)) }}
 ---

@@ -1,7 +1,7 @@
 {{- range $serviceName := (.Values.services | keys) -}}
 {{- $service := include "service.resolved" (dict "root" $ "service_name" $serviceName) | fromYaml -}}
 {{- with $service }}
-{{- if and (not (hasPrefix "." $serviceName)) .enabled }}
+{{- if and (not (hasPrefix "_" $serviceName)) .enabled }}
 {{- $autoscaling := .autoscaling | default (dict "minReplicas" 0) -}}
 {{- if or (gt (.replicas | default 1 | int) 1) (and $autoscaling.enabled (gt ($autoscaling.minReplicas | int) 1)) }}
 ---

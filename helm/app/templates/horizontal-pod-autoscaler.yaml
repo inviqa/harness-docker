@@ -2,7 +2,7 @@
 {{- $service := include "service.resolved" (dict "root" $ "service_name" $serviceName) | fromYaml -}}
 {{- with $service }}
 {{- $autoscaling := .autoscaling | default (dict) -}}
-{{- if and (not (hasPrefix "." $serviceName)) .enabled $autoscaling.enabled }}
+{{- if and (not (hasPrefix "_" $serviceName)) .enabled $autoscaling.enabled }}
 ---
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
