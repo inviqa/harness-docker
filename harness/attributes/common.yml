@@ -12,6 +12,11 @@ attributes.default:
 
     services: []
 
+  task:
+    build:
+      when: 'true'
+      steps: []
+
   delegated-volumes: false
   mutagen: true
 
