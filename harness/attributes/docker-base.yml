@@ -84,7 +84,8 @@ attributes:
       major_version: 8
       port: 8983
     varnish:
-      image: varnish:6
+      # 6.0 is LTS
+      image: varnish:6.0
       environment:
         VARNISH_SIZE: "1024M"
       resources:
