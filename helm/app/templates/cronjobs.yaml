@@ -4,7 +4,11 @@
 {{- range $cronName, $cronConfig := $service.cronjobs }}
 {{- with (mergeOverwrite (deepCopy $service) (deepCopy $cronConfig)) }}
 ---
+{{- if semverCompare ">=1.21-0" $.Capabilities.KubeVersion.Version }}
+apiVersion: batch/v1
+{{- else }}
 apiVersion: batch/v1beta1
+{{- end }}
 kind: CronJob
 metadata:
   name: {{ print $.Release.Name "-" $cronName }}
@@ -66,7 +70,7 @@ spec:
               image: {{ .image | quote }}
               imagePullPolicy: Always
               {{- with (pick $cronConfig "command" "args") }}
-              {{- . | toYaml | nindent 10 }}
+              {{- . | toYaml | nindent 14 }}
               {{- end }}
               resources:
                 limits:
@@ -80,7 +84,7 @@ spec:
                 {{- end }}
               {{- end }}
           enableServiceLinks: false
-{{- if .Values.docker.image_pull_config }}
+{{- if $.Values.docker.image_pull_config }}
           imagePullSecrets:
           - name: {{ $.Release.Name }}-image-pull-config
 {{- end }}
