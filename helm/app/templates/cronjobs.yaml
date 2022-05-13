@@ -70,7 +70,7 @@ spec:
               image: {{ .image | quote }}
               imagePullPolicy: Always
               {{- with (pick $cronConfig "command" "args") }}
-              {{- . | toYaml | nindent 10 }}
+              {{- . | toYaml | nindent 14 }}
               {{- end }}
               resources:
                 limits:
@@ -84,7 +84,7 @@ spec:
                 {{- end }}
               {{- end }}
           enableServiceLinks: false
-{{- if .Values.docker.image_pull_config }}
+{{- if $.Values.docker.image_pull_config }}
           imagePullSecrets:
           - name: {{ $.Release.Name }}-image-pull-config
 {{- end }}
