@@ -62,7 +62,7 @@ command('helm template <chart-path>'):
       passthru helm init --client-only
     fi
     passthru helm dependency build
-    passthru helm template --kubernetes-version "${K8S_VERSION}" .
+    passthru helm template --kube-version "${K8S_VERSION}" .
 
 command('helm kubeval [--cleanup] <chart-path>'):
   env:
