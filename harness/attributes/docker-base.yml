@@ -1,5 +1,4 @@
 attributes:
-  configMaps: {}
   services:
     console:
       enabled: true
@@ -110,6 +109,7 @@ attributes:
           # requires sealed-secrets k8s operator
           enabled: true
           scope: = @('helm.sealed_secrets.scope')
+      configMaps: {}
       services:
         mysql:
           options: = @('services.mysql.options')
