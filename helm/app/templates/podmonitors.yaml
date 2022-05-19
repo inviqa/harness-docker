@@ -1,6 +1,6 @@
 {{- range $serviceName := (.Values.services | keys) -}}
 {{- with (include "service.resolved" (dict "root" $ "service_name" $serviceName) | fromYaml) }}
-{{- if and (not (hasPrefix "_" $serviceName)) $.Values.prometheus.podMonitoring (. | dig "metricsEnabled" true) .metricsEndpoints }}
+{{- if and (not (hasPrefix "_" $serviceName)) $.Values.global.prometheus.podMonitoring (. | dig "metricsEnabled" true) .metricsEndpoints }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor

@@ -101,8 +101,15 @@ attributes:
       global:
         affinity:
           selfAntiAffinityTopologyKey: ~
-      prometheus:
-        podMonitoring: false
+        prometheus:
+          podMonitoring: false
+        sealed_secrets:
+          # Note: be very careful considering disabling this, as in most cases
+          # it causes the secrets in it to be stored plaintext on filesystem
+          # or in helm chart repositories
+          # requires sealed-secrets k8s operator
+          enabled: true
+          scope: = @('helm.sealed_secrets.scope')
       services:
         mysql:
           options: = @('services.mysql.options')
