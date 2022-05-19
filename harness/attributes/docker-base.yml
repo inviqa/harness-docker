@@ -98,6 +98,9 @@ attributes:
         memory: "1124Mi"
   pipeline:
     base:
+      global:
+        affinity:
+          selfAntiAffinityTopologyKey: ~
       prometheus:
         podMonitoring: false
       services:
