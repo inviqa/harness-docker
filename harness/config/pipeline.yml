@@ -45,7 +45,7 @@ command('app deploy <environment>'):
     #!bash(harness:/helm)|=
     set -o pipefail
     cd "${ENVIRONMENT}"
-    doctl -t "$DO_ACCESS_TOKEN" kubernetes cluster kubeconfig show "$CLUSTER" > kubectl.config.yaml
+    (umask 0077 && doctl -t "$DO_ACCESS_TOKEN" kubernetes cluster kubeconfig show "$CLUSTER" > kubectl.config.yaml)
     passthru helm dependency build
     passthru helm --kubeconfig="${PWD}/kubectl.config.yaml" upgrade --wait --atomic --install --timeout "${TIMEOUT}" --namespace "${NAMESPACE}" "${NAMESPACE}" ./
 
