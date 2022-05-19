@@ -232,8 +232,6 @@ attributes.default:
       s-maxage: ~
     target_service: nginx
 
-  replicas:
-    varnish: 1
   persistence:
     enabled: false
     mountVolumesOnConsole: true # possible to disable, but may lead to unexpected concequences with app init/migrate
