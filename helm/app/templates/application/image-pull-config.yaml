@@ -1,5 +1,5 @@
-{{ if .Values.docker.image_pull_config }}
-{{ if .Values.feature.sealed_secrets }}
+{{- if .Values.docker.image_pull_config }}
+{{- if .Values.global.sealed_secrets.enabled }}
 apiVersion: bitnami.com/v1alpha1
 kind: SealedSecret
 {{ else }}
@@ -10,8 +10,8 @@ metadata:
   name: {{ .Release.Name }}-image-pull-config
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-{{ if .Values.feature.sealed_secrets }}
-    sealedsecrets.bitnami.com/cluster-wide: "true"
+{{- if .root.Values.global.sealed_secrets.enabled }}
+    sealedsecrets.bitnami.com/{{ .root.Values.global.sealed_secrets.scope }}: "true"
   labels:
     {{- include "chart.labels" $ | nindent 4 }}
 spec:
@@ -22,9 +22,9 @@ spec:
         {{- include "chart.labels" $ | nindent 8 }}
   encryptedData:
     .dockerconfigjson: {{ .Values.docker.image_pull_config }}
-{{ else }}
+{{- else }}
 type: kubernetes.io/dockerconfigjson
 data:
   .dockerconfigjson: {{ .Values.docker.image_pull_config }}
-{{ end }}
-{{ end }}
+{{- end }}
+{{- end }}

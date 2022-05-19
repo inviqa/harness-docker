@@ -22,9 +22,4 @@ replicas: {{ to_nice_yaml(@('replicas'), 2, 2) | raw }}
 
 persistence: {{ to_nice_yaml(@('pipeline.base.persistence'), 2, 2) | raw }}
 
-prometheus: {{ to_nice_yaml(@('pipeline.base.prometheus'), 2, 2) | raw }}
-
-sealed_secrets:
-  scope: {{ @('helm.sealed_secrets.scope') | json_encode | raw }}
-
 istio: {{ to_nice_yaml(@('pipeline.base.istio'), 2, 2) | raw }}

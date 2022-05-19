@@ -52,14 +52,14 @@ A template to fully resolve services that extend template services
 {{- end -}}
 
 {{- define "service.environment.secret" }}
-{{ if and .service.environment_secrets (.service.enabled | default true) }}
-{{ if .root.Values.feature.sealed_secrets }}
+{{- if and .service.environment_secrets (.service.enabled | default true) }}
+{{- if .root.Values.global.sealed_secrets.enabled }}
 apiVersion: bitnami.com/v1alpha1
 kind: SealedSecret
-{{ else }}
+{{- else }}
 apiVersion: v1
 kind: Secret
-{{ end }}
+{{- end }}
 metadata:
   name: {{ print .root.Release.Name "-" .service_name }}
   labels:
@@ -67,23 +67,23 @@ metadata:
     app.kubernetes.io/component: {{ .component | default .service_name }}
   annotations:
     argocd.argoproj.io/sync-wave: "1"
-{{ if .root.Values.feature.sealed_secrets }}
-{{ if ne .root.Values.sealed_secrets.scope "strict" }}
-    sealedsecrets.bitnami.com/{{ .root.Values.sealed_secrets.scope }}: "true"
-{{ end }}
+{{- if .root.Values.global.sealed_secrets.enabled }}
+{{- if ne .root.Values.global.sealed_secrets.scope "strict" }}
+    sealedsecrets.bitnami.com/{{ .root.Values.global.sealed_secrets.scope }}: "true"
+{{- end }}
 spec:
   encryptedData:
-{{ index .service.environment_secrets | toYaml | nindent 4 }}
+{{- index .service.environment_secrets | toYaml | nindent 4 }}
   template:
     metadata:
       labels:
         {{- include "chart.labels" .root | nindent 8 }}
         app.kubernetes.io/component: {{ .component | default .service_name }}
-{{ else }}
+{{- else }}
 stringData:
-{{ index .service.environment_secrets | toYaml | nindent 2 -}}
-{{ end }}
-{{ end }}
+{{- index .service.environment_secrets | toYaml | nindent 2 -}}
+{{- end }}
+{{- end }}
 {{- end }}
 
 {{- define "pod.selfAntiAffinity" -}}
