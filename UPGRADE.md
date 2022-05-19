@@ -8,8 +8,9 @@ The following attributes were moved to a new key:
 
 * `helm.feature.sealed_secrets` -> `pipeline.base.global.sealed_secrets.enabled`
 * `pipeline.base.prometheus.podmonitoring` -> `pipeline.base.global.prometheus.podmonitoring`
+* `replicas.varnish` -> `pipeline.base.services.varnish.replicas` # however the value has been removed, as the default is 1
 
-As such, they have also been moved in the helm values to their respective global configuration maps.
+As such, they have also been moved in the helm values to their respective global and services configuration maps.
 
 ### Solr image now built and deployable
 
