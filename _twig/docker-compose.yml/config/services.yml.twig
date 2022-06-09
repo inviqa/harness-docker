@@ -1,0 +1,12 @@
+{% set blocks  = '_twig/docker-compose.yml/' %}
+{% set configs = [] %}
+
+{% for serviceName, service in @('services') %}
+{% if service['enabled'] %}
+{% set configs = configs|merge([from_yaml(include(blocks ~ 'service/' ~ serviceName ~ '.yml.twig'))]) %}
+{% endif %}
+{% endfor %}
+
+{% if configs is not empty %}
+{{ to_nice_yaml(deep_merge(configs), 2, 0) }}
+{% endif %}

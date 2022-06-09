@@ -2,6 +2,7 @@
   | filter(v => v is not empty)
   | map((value, var) => '--' ~ var ~ '=' ~ value)
   | reduce((carry, v) => carry|merge([v]), []) %}
+services:
   mysql:
     image: {{ @('services.mysql.image') }}
     labels:

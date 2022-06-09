@@ -33,6 +33,10 @@ function('to_nice_yaml', [data, indentation, nesting]): |
   }
   = $yaml;
 
+function('from_yaml', [stringData]): |
+  #!php
+  = \Symfony\Component\Yaml\Yaml::parse($stringData);
+
 function('indent', [text, indentation]): |
   #!php
   = preg_replace('/^/m', str_repeat(' ', $indentation ?: 2), $text);

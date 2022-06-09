@@ -1,3 +1,4 @@
+services:
   redis:
     image: {{ @('services.redis.image')  }}
     # 1GB; evict any least recently used key even if they don't have a TTL

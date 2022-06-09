@@ -1,6 +1,7 @@
 {% if @('services.varnish.enabled') %}
 {% set hostnames = [@('hostname')] %}
 {% set hostnames = hostnames|merge(@('hostname_aliases')|map(alias => "#{alias}." ~ @('domain'))) %}
+services:
   varnish:
     image: {{ @('services.varnish.image') }}
     labels:
