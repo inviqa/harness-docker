@@ -1,3 +1,4 @@
+services:
   redis-session:
     image: {{ @('services.redis-session.image') }}
     # 1GB; evict key that would expire soonest

@@ -94,7 +94,6 @@ attributes.default:
     buildkit:
       enabled: true
     compose:
-      file_version: ~
       host_volume_options: "= ':' ~ (@('delegated-volumes') ? 'delegated' : 'cached')"
     # If using gitops helm chart repositories, it's recommended to put this configuration
     # in the values.yml in there now instead of project application repositories

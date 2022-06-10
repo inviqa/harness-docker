@@ -1,0 +1,19 @@
+{% set syncvolume = false %}
+{% if @('host.os') == 'darwin' and @('mutagen') %}
+{% set syncvolume = true %}
+{% endif %}
+
+{% if syncvolume %}
+volumes:
+{% if @('mutagen') %}
+{% for volumeName in get_mutagen_volume_names() %}
+  {{ volumeName }}:
+    external: true
+{% endfor %}
+{% else %}
+  {{ @('workspace.name') }}-sync:
+    external: true
+{% endif %}
+{% else %}
+{}
+{% endif %}
