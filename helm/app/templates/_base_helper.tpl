@@ -68,6 +68,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 {{- if .root.Values.global.sealed_secrets.enabled }}
+    sealedsecrets.bitnami.com/scope: {{ .root.Values.global.sealed_secrets.scope }}
 {{- if ne .root.Values.global.sealed_secrets.scope "strict" }}
     sealedsecrets.bitnami.com/{{ .root.Values.global.sealed_secrets.scope }}: "true"
 {{- end }}
