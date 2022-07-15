@@ -1,4 +1,4 @@
-{{ if .Values.services.postgres.enabled }}
+{{- if .Values.services | dig "postgres" "enabled" false }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -16,4 +16,4 @@ spec:
     app.service: {{ .Release.Name }}-postgres
 status:
   loadBalancer: {}
-{{ end }}
+{{- end }}

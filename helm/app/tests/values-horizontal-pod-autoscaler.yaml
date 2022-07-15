@@ -1,0 +1,30 @@
+services:
+  no-hpa:
+    enabled: true
+  hpa-not-explicitly-enabled:
+    enabled: true
+    autoscaling:
+      minReplicas: 1
+      maxReplicas: 3
+  hpa-with-simplified-pod-metrics:
+    enabled: true
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 3
+      targetMemoryUtilizationPercentage: 80
+      targetCPUUtilizationPercentage: 90
+  hpa-with-container-metrics:
+    enabled: true
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 3
+      metrics:
+        - type: ContainerResource
+          containerResource:
+            name: cpu
+            container: application
+            target:
+              type: Utilization
+              averageUtilization: 60

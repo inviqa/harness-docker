@@ -1,4 +1,4 @@
-{{ if .Values.services.mysql.enabled }}
+{{ if .Values.services | dig "mysql" "enabled" false }}
 apiVersion: v1
 kind: Service
 metadata:

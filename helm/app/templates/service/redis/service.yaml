@@ -1,4 +1,4 @@
-{{ if .Values.services.redis.enabled }}
+{{- if .Values.services | dig "redis" "enabled" false }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -16,4 +16,4 @@ spec:
     app.service: {{ .Release.Name }}-redis
 status:
   loadBalancer: {}
-{{ end }}
+{{- end }}

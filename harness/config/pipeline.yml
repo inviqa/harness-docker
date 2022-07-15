@@ -95,6 +95,10 @@ command('helm kubeval [--cleanup] <chart-path>'):
 
     passthru helm kubeval "${KUBEVAL_OPTS[@]}" .
 
+    for TEST_FILE in ./tests/values-*.yaml; do
+      passthru helm kubeval "${KUBEVAL_OPTS[@]}" -f "$TEST_FILE" .
+    done
+
     if [ "$CLEANUP" = "1" ]; then
       run rm -rf charts/ requirements.lock
     fi

@@ -1,4 +1,4 @@
-{{ if .Values.services.elasticsearch.enabled }}
+{{- if .Values.services | dig "elasticsearch" "enabled" false }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -16,4 +16,4 @@ spec:
     app.service: {{ .Release.Name }}-elasticsearch
 status:
   loadBalancer: {}
-{{ end }}
+{{- end }}

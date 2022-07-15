@@ -1,4 +1,4 @@
-{{ if .Values.services.rabbitmq.enabled }}
+{{ if .Values.services | dig "rabbitmq" "enabled" false }}
 apiVersion: v1
 kind: Service
 metadata:

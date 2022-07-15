@@ -1,7 +1,5 @@
-{{ if and .Values.persistence.redis.enabled .Values.services.redis.enabled -}}
-
 {{- with .Values.persistence.redis -}}
-
+{{- if and .enabled ($.Values.services | dig "redis" "enabled" false) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:

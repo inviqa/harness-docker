@@ -1,0 +1,7 @@
+configMaps:
+  config:
+    labels:
+      foo: bar
+    data:
+      config.yaml: |
+        foo: bar

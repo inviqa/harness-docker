@@ -1,7 +1,5 @@
-{{ if and .Values.persistence.elasticsearch.enabled .Values.services.elasticsearch.enabled -}}
-
 {{- with .Values.persistence.elasticsearch -}}
-
+{{- if and .enabled ($.Values.services | dig "elasticsearch" "enabled" false) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:

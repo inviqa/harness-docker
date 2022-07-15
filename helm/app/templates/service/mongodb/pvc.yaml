@@ -1,6 +1,5 @@
-{{ if and .Values.services.mongodb.enabled .Values.persistence.mongodb.enabled -}}
 {{- with .Values.persistence.mongodb -}}
-
+{{- if and .enabled ($.Values.services | dig "mongodb" "enabled" false) }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
