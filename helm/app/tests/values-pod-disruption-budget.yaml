@@ -1,0 +1,25 @@
+services:
+  no-pdb:
+    enabled: true
+  no-implicit-pdb-on-1-replica:
+    enabled: true
+    replicas: 1
+  implicit-pdb-on-multiple-replicas:
+    enabled: true
+    replicas: 3
+  no-implicit-pdb-on-hpa-minReplicas-1:
+    enabled: true
+    autoscaling:
+      enabled: true
+      minReplicas: 1
+      maxReplicas: 3
+  implicit-pdb-on-hpa:
+    enabled: true
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 3
+  pdb-minAvailable:
+    enabled: true
+    replicas: 3
+    minAvailable: 2
