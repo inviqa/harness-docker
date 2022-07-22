@@ -1,0 +1,21 @@
+{% if @('docker.shared_networks') %}
+services:
+{% for serviceName, service in @('services') %}
+{% if service['enabled'] and not (service['containers'] is defined) %}
+  {{ serviceName }}:
+    networks:
+      {% for network in @('docker.shared_networks') %}
+      {{ network }}:
+        aliases:
+          - {{ @('workspace.name') }}-{{ serviceName }}
+      {% endfor %}
+{% endif %}
+{% endfor %}
+
+networks:
+  {% for network in @('docker.shared_networks') %}
+  {{ network }}:
+    external: true
+    name: {{ @('docker.shared_network.name') }}
+  {% endfor %}
+{% endif %}

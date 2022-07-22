@@ -2,6 +2,7 @@
 {%- set configs = [
   from_yaml(include(blocks ~ 'config/services.yml.twig')),
   from_yaml(include(blocks ~ 'config/networks.yml.twig')),
+  from_yaml(include(blocks ~ 'config/networks-shared.yml.twig')),
   from_yaml(include(blocks ~ 'config/sync-volume.yml.twig')),
 ] %}
 
