@@ -100,6 +100,7 @@ attributes.default:
     image_pull_config: = @('docker.config')
     port_forward:
       enabled: "= @('app.build') == 'dynamic'"
+    shared_networks: []
 
   backend:
     path: /app
