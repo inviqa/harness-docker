@@ -6,6 +6,7 @@ harness('inviqa/docker'):
       - proxy
     confd:
       - harness:/
+    workspace: '~0.3'
 ---
 import:
   - harness/config/*.yml

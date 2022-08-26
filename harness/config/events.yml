@@ -1,6 +1,7 @@
 
 after('harness.install'): |
   #!bash
+  ws version check
   ws enable
 
 after('harness.refresh'):
