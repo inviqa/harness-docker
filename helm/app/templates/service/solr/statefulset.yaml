@@ -27,6 +27,9 @@ spec:
         app.kubernetes.io/component: solr
         app.service: {{ $.Release.Name }}-solr
     spec:
+      {{- with (pick . "affinity") }}
+      {{- . | toYaml | nindent 6 }}
+      {{- end }}
       securityContext:
         fsGroup: 8983
         runAsUser: 8983
@@ -69,6 +72,7 @@ spec:
       volumes:
       - name: {{ $.Release.Name }}-solr-data
         emptyDir: {}
+      topologySpreadConstraints: {{- (include "pod.topologySpreadConstraints" (dict "root" $ "serviceName" "solr" "service" .)) | nindent 8 }}
 {{- with $.Values.persistence.solr -}}
 {{- if .enabled }}
   volumeClaimTemplates:

@@ -82,6 +82,7 @@ spec:
       {{- if $service.serviceAccountName }}
       serviceAccountName: {{ tpl $service.serviceAccountName $ | quote }}
       {{- end }}
+      topologySpreadConstraints: {{- (include "pod.topologySpreadConstraints" (dict "root" $ "serviceName" $jobName "service" .)) | nindent 12 }}
       {{- with .volumes }}
       volumes:
         {{- range . }}

@@ -25,7 +25,9 @@ spec:
         app.kubernetes.io/component: console
         app.service: {{ $.Release.Name }}-console
     spec:
-      affinity: {{- include "pod.affinity" (dict "root" $ "serviceName" "console" "service" .) | nindent 8 }}
+      {{- with (pick . "affinity") }}
+      {{- . | toYaml | nindent 6 }}
+      {{- end }}
       containers:
       - env:
         {{- range $key, $value := (mergeOverwrite (dict) .environment .environment_dynamic) }}
@@ -73,6 +75,7 @@ spec:
       - name: {{ $.Release.Name }}-image-pull-config
 {{- end }}
       restartPolicy: Always
+      topologySpreadConstraints: {{- (include "pod.topologySpreadConstraints" (dict "root" $ "serviceName" "console" "service" .)) | nindent 8 }}
       enableServiceLinks: false
       volumes:
       {{- if not (eq "" (include "application.volumes.console" $)) }}

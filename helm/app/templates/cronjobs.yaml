@@ -92,6 +92,7 @@ spec:
           serviceAccountName: {{ tpl $service.serviceAccountName $ | quote }}
           {{- end }}
           {{- with .volumes }}
+          topologySpreadConstraints: {{- (include "pod.topologySpreadConstraints" (dict "root" $ "serviceName" $cronName "service" .)) | nindent 12 }}
           volumes:
             {{- range . }}
             - {{ tpl (toYaml (omit . "mountPath" "readOnly")) $ | nindent 12 }}

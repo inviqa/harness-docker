@@ -98,8 +98,14 @@ attributes:
   pipeline:
     base:
       global:
-        affinity:
-          selfAntiAffinityTopologyKey: ~
+        topologySpreadConstraints: []
+          # - topologyKey: topology.kubernetes.io/zone
+          #   # defaults:
+          #   # maxSkew: 1
+          #   # whenUnsatisfiable: ScheduleAnyway
+          # - topologyKey: kubernetes.io/hostname
+          #   maxSkew: 2
+          #   whenUnsatisfiable: DoNotSchedule
         prometheus:
           podMonitoring: false
         sealed_secrets:
