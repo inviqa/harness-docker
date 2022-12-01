@@ -1,0 +1,24 @@
+services:
+  cronjobs-not-specified:
+    enabled: true
+  cronjobs-empty:
+    enabled: true
+    cronjobs: {}
+  some-cronjobs:
+    enabled: true
+    cronjobs:
+      app-flush:
+        schedule: '0 0 0 * * *'
+        command:
+          - app
+          - flush
+      app-sync:
+        schedule: '0 * * * * *'
+        concurrencyPolicy: Forbid
+        command:
+          - app
+          - sync
+        resources:
+          memory: 200Mi
+    resources:
+      memory: 100Mi

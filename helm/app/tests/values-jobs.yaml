@@ -1,0 +1,32 @@
+services:
+  jobs-not-specified:
+    enabled: true
+  jobs-empty:
+    enabled: true
+    jobs: {}
+  some-jobs:
+    enabled: true
+    jobs:
+      app-init:
+        annotations:
+          helm.sh/hook: "pre-install"
+          helm.sh/hook-delete-policy: "before-hook-creation"
+          argocd.argoproj.io/sync-wave: "10"
+          # an app init job doesn't need argocd hooks, as it runs once only anyway
+        command:
+          - app
+          - init
+      app-migrate:
+        annotations:
+          helm.sh/hook: "pre-upgrade"
+          helm.sh/hook-delete-policy: "before-hook-creation"
+          argocd.argoproj.io/hook: "Sync"
+          argocd.argoproj.io/hook-delete-policy: "BeforeHookCreation"
+          argocd.argoproj.io/sync-wave: "10"
+        command:
+          - app
+          - migrate
+        resources:
+          memory: 200Mi
+    resources:
+      memory: 100Mi

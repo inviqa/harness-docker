@@ -1,4 +1,4 @@
-{{ if .Values.services.mongodb.enabled }}
+{{ if .Values.services | dig "mongodb" "enabled" false }}
 apiVersion: v1
 kind: Service
 metadata:
