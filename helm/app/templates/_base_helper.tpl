@@ -106,7 +106,7 @@ stringData:
   {{- if not (or (hasKey . "labelSelector") (hasKey . "matchLabelKeys")) }}
   labelSelector:
     matchLabels:
-      app.service: {{ $.root.Values.resourcePrefix }}{{ $.serviceName }}
+      app.service: {{ print $.root.Release.Name "-" $.serviceName }}
   {{- end }}
 {{- end }}
 {{- end }}
