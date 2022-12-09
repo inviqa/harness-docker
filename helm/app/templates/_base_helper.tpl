@@ -93,10 +93,8 @@ stringData:
 []
 {{- else }}
 {{- range $topologySpreadConstraints }}
-- labelSelector:
-    matchLabels:
-      app.service: {{ $.root.Values.resourcePrefix }}{{ $.serviceName }}
-  {{- with (pick . "maxSkew" "topologyKey" "whenUnsatisfiable") }}
+- 
+  {{- with (pick . "labelSelector" "matchLabelKeys" "maxSkew" "topologyKey" "whenUnsatisfiable") }}
   {{- . | toYaml | nindent 2 }}
   {{- end }}
   {{- if not (hasKey . "maxSkew") }}
@@ -104,6 +102,11 @@ stringData:
   {{- end }}
   {{- if not (hasKey . "whenUnsatisfiable") }}
   whenUnsatisfiable: ScheduleAnyway
+  {{- end }}
+  {{- if not (or (hasKey . "labelSelector") (hasKey . "matchLabelKeys")) }}
+  labelSelector:
+    matchLabels:
+      app.service: {{ $.root.Values.resourcePrefix }}{{ $.serviceName }}
   {{- end }}
 {{- end }}
 {{- end }}
