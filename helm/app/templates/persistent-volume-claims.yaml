@@ -1,0 +1,39 @@
+{{- if .Values.persistence.enabled }}
+{{- range $key, $value := omit .Values.persistence "enabled" }}
+{{- $hasEnabledService := false }}
+{{- range (.services | default (list)) }}
+{{- if dig $.Values.services . "enabled" false }}
+{{- $hasEnabledService = true }}
+{{- end }}
+{{- end }}
+{{- if and (. | dig "create" true) (. | dig "enabled" $hasEnabledService) }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ tpl (.claimName | default "") $ | default (print $.Release.Name "-" $key) | quote }}
+  labels:
+    {{- include "chart.labels" $ | nindent 4 }}
+  {{- with (pick . "annotations") }}
+  {{- . | toYaml | nindent 2 }}
+  {{- end }}
+spec:
+  accessModes:
+    - {{ .accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .size | quote }}
+{{- if .storageClass }}
+{{- if (eq "-" .storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: {{ .storageClass | quote }}
+{{- end }}
+{{- end }}
+{{- if .selector }}
+  selector:
+  {{- .selector | toYaml | nindent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

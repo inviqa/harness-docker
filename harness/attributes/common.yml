@@ -236,37 +236,51 @@ attributes.default:
     mountVolumesOnConsole: true # possible to disable, but may lead to unexpected concequences with app init/migrate
 
     elasticsearch:
-      enabled: true
       accessMode: ReadWriteOnce
+      claimName: "{{ $.Release.Name }}-elasticsearch-pv-claim" # legacy naming
       size: 2Gi
+      services:
+        - elasticsearch
     mongodb:
-      enabled: true
       accessMode: ReadWriteOnce
       size: 1Gi
+      services:
+        - mongodb
     mysql:
-      enabled: true
       accessMode: ReadWriteOnce
+      claimName: "{{ $.Release.Name }}-mysql-pv-claim" # legacy naming
       size: 4Gi
+      services:
+        - mysql
     rabbitmq:
-      enabled: true
       accessMode: ReadWriteOnce
+      claimName: "{{ $.Release.Name }}-rabbitmq-pv-claim" # legacy naming
       size: 2Gi
+      services:
+        - rabbitmq
     postgres:
-      enabled: true
       accessMode: ReadWriteOnce
+      claimName: "{{ $.Release.Name }}-postgres-pv-claim" # legacy naming
       size: 4Gi
+      services:
+        - postgres
     redis:
-      enabled: false
       accessMode: ReadWriteOnce
+      claimName: "{{ $.Release.Name }}-redis-pv-claim" # legacy naming
       size: 2Gi
+      services:
+        - redis
     redis-session:
-      enabled: true
       accessMode: ReadWriteOnce
+      claimName: "{{ $.Release.Name }}-redis-session-pv-claim" # legacy naming
       size: 2Gi
-    solr:
-      enabled: true
+      services:
+        - redis-sesison
+    solr-data:
       accessMode: ReadWriteOnce
       size: 1Gi
+      services:
+        - solr
 
   tls:
     key: |
