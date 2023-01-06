@@ -1,0 +1,11 @@
+global:
+  topologySpreadConstraints:
+    - topologyKey: topology.kubernetes.io/zone
+
+services:
+  varnish:
+    enabled: true
+    topologySpreadConstraints:
+      - topologyKey: topology.kubernetes.io/zone
+      - topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
