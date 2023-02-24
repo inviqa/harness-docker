@@ -19,7 +19,7 @@ command('enable'):
 command('version check'): |
     #!php
     if (!method_exists(my127\Workspace\Application::class, 'getVersion')) {
-      echo "Workspace versions prior to 0.3.0 not supported by this harness version\n";
+      echo "Workspace versions prior to 0.3.1 not supported by this harness version\n";
       echo "Please upgrade Workspace to continue\n";
       exit(1);
     }
