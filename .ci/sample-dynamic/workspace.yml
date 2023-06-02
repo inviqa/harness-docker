@@ -20,5 +20,5 @@ attributes:
 
 attribute('docker.port_forward.enabled'): false
 
-attribute('pipeline.base.ingress.annotations'):
+attribute('pipeline.base.ingresses.app.annotations'):
   example_nginx: test
