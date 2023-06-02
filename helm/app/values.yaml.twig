@@ -1,6 +1,6 @@
 appVersion: {{ @('app.version') | json_encode | raw }}
 
-ingress: {{ to_nice_yaml(@('pipeline.base.ingress'), 2, 2) | raw }}
+ingresses: {{ to_nice_yaml(@('pipeline.base.ingresses'), 2, 2) | raw }}
 
 global: {{ to_nice_yaml(@('pipeline.base.global'), 2, 2) | raw }}
 
