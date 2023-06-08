@@ -80,6 +80,7 @@ function('filter_local_services', [services]): |
         case 'enabled':
         case 'environment':
         case 'environment_dynamic':
+        case 'extends':
         case 'image':
         case 'resources':
           $filteredService[$key] = $value;
@@ -96,14 +97,18 @@ function('filter_local_services', [services]): |
   }
   = $filteredServices;
 
+function('filter_empty', [array_input]): |
+  #!php
+  = array_filter($array_input);
+
 function('flatten', [array_input]): |
   #!php
   $iterator = new RecursiveIteratorIterator(new RecursiveArrayIterator($array_input));
   = iterator_to_array($iterator, false);
 
-function('get_docker_external_networks'): |
+function('get_docker_external_networks', [compose_bin]): |
   #!php
-  $configRaw = shell_exec('docker-compose config');
+  $configRaw = shell_exec($compose_bin . ' config');
   if ($configRaw === null) {
     exit(1);
   }
@@ -122,9 +127,9 @@ function('get_docker_external_networks'): |
   }
   = join(" ", $externalNetworks);
 
-function('docker_service_images', [filterService]): |
+function('docker_service_images', [compose_bin, filterService]): |
   #!php
-  $configRaw = shell_exec('docker-compose config');
+  $configRaw = shell_exec($compose_bin . ' config');
   if ($configRaw === null) {
     exit(1);
   }
@@ -243,8 +248,14 @@ function('replace', [haystack, needle, replacement]): |
 
 function('template_key_value', [template, key_value]): |
   #!php
+  if (empty($key_value)) {
+    return [];
+  }
   $output = [];
   foreach ($key_value as $key => $value) {
+    if ($value === null) {
+      continue;
+    }
     $output[str_replace('{{key}}', $key, $template)] = $value;
   }
   = $output;
