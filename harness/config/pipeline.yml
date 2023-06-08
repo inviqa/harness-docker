@@ -1,11 +1,12 @@
 command('app publish'):
   env:
+    COMPOSE_BIN: = @('docker.compose.bin')
     COMPOSE_HTTP_TIMEOUT: 180
     DOCKER_CLIENT_TIMEOUT: 180
   exec: |
     #!bash(workspace:/)|@
     echo '@('docker.registry.password')' | run docker login --username='@('docker.registry.username')' --password-stdin '@('docker.registry.url')'
-    passthru docker-compose push @('pipeline.publish.services')
+    passthru $COMPOSE_BIN push @('pipeline.publish.services')
     run docker logout '@('docker.registry.url')'
 
 command('app publish chart <release> <message>'):
@@ -14,7 +15,8 @@ command('app publish chart <release> <message>'):
     REPOSITORY: = @('pipeline.publish.chart.git.repository')
     ARTIFACTS_PATH:  = "./build-artifacts-repository/" ~ @('pipeline.publish.chart.git.path') ~ "/" ~ input.argument('release')
     MESSAGE:    = input.argument('message')
-    USER_EMAIL: = @('pipeline.publish.chart.git.email')
+    GIT_USER_NAME: = @('pipeline.publish.chart.git.user_name')
+    GIT_USER_EMAIL: = @('pipeline.publish.chart.git.email')
   exec: |
     #!bash(workspace:/)|@
 
@@ -28,7 +30,8 @@ command('app publish chart <release> <message>'):
     export GIT_SSH_COMMAND='ssh -i '"$(printf '%q' "$WS_APP_PUBLISH_CHART_SSH_PRIVATE_KEY")"' -o "IdentitiesOnly yes" -F /dev/null -o StrictHostKeyChecking=no'
 
     run git clone "$REPOSITORY" ./build-artifacts-repository
-    run git -C ./build-artifacts-repository config user.email "${USER_EMAIL}"
+    run git -C ./build-artifacts-repository config user.name "${GIT_USER_NAME}"
+    run git -C ./build-artifacts-repository config user.email "${GIT_USER_EMAIL}"
 
     run mkdir -p $ARTIFACTS_PATH
     run rsync --exclude='*.twig' --exclude='_twig' --delete -a .my127ws/helm/app/ "${ARTIFACTS_PATH}/"
@@ -48,6 +51,7 @@ command('app deploy <environment>'):
     set -o pipefail
     cd "${ENVIRONMENT}"
     (umask 0077 && doctl -t "$DO_ACCESS_TOKEN" kubernetes cluster kubeconfig show "$CLUSTER" > kubectl.config.yaml)
+    kubectl --kubeconfig="${PWD}/kubectl.config.yaml" create ns "${NAMESPACE}" || true
     passthru helm dependency build
     passthru helm --kubeconfig="${PWD}/kubectl.config.yaml" upgrade --wait --atomic --install --timeout "${TIMEOUT}" --namespace "${NAMESPACE}" "${NAMESPACE}" ./
 

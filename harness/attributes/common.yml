@@ -99,6 +99,7 @@ attributes.default:
     buildkit:
       enabled: true
     compose:
+      bin: 'docker-compose'
       host_volume_options: "= ':' ~ (@('delegated-volumes') ? 'delegated' : 'cached')"
     # If using gitops helm chart repositories, it's recommended to put this configuration
     # in the values.yml in there now instead of project application repositories
@@ -159,7 +160,10 @@ attributes.default:
   database:
     # possible platforms are mysql, postgres or ~ for none
     platform: mysql
-    platform_version: 8.0
+    platform_version: >
+      = @('database.platform') == 'mysql' ? '8.0'
+      : @('database.platform') == 'postgres' ? '9.6'
+      : null
     host: mysql
     port: 3306
     user: app
