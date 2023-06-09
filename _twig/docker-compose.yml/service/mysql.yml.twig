@@ -1,4 +1,4 @@
-{% set command = @('services.mysql.options')
+{% set command = @('services.mysql.config.options')
   | filter(v => v is not empty)
   | map((value, var) => '--' ~ var ~ '=' ~ value)
   | reduce((carry, v) => carry|merge([v]), []) %}

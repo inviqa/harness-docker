@@ -7,9 +7,11 @@
 The following attributes were moved to a new key:
 
 * `helm.feature.sealed_secrets` -> `pipeline.base.global.sealed_secrets.enabled`
-* `pipeline.base.prometheus.podmonitoring` -> `pipeline.base.global.prometheus.podmonitoring`
-* `replicas.varnish` -> `pipeline.base.services.varnish.replicas` # however the value has been removed, as the default is 1
 * `pipeline.base.ingress` ->  `pipeline.base.ingresses.*` # ingresses aren't managed in this harness but the concept of multiple ingresses is required
+* `pipeline.base.prometheus.podmonitoring` -> `pipeline.base.global.prometheus.podmonitoring`
+* `pipeline.base.services.mysql.options` -> `pipeline.base.services.mysql.config.options`
+* `replicas.varnish` -> `pipeline.base.services.varnish.replicas` # however the value has been removed, as the default is 1
+* `services.mysql.options` -> `services.mysql.config.options`
 
 As such, they have also been moved in the helm values to their respective global and services configuration maps.
 
