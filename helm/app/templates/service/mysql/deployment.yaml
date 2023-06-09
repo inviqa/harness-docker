@@ -40,9 +40,9 @@ spec:
         image: {{ .image | quote }}
         imagePullPolicy: Always
         name: mysql
-        {{- if .options }}
+        {{- with .config.options }}
         args:
-        {{- range $var, $value := .options }}
+        {{- range $var, $value := . }}
         {{- if $value }}
         - {{ print "--" $var "=" $value | quote }}
         {{- end }}
