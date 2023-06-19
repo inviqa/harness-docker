@@ -3,6 +3,13 @@
 # shellcheck disable=SC2206
 COMPOSE_BIN=($COMPOSE_BIN)
 
+service_configured()
+{
+    "${COMPOSE_BIN[@]}" config --services | grep --quiet -Fxe "$1"
+}
+
+CONSOLE_CONFIGURED="$(service_configured console && echo "true" || echo "false")"
+
 console_enabled()
 {
     if [ "$APP_BUILD" = dynamic ]; then
@@ -34,7 +41,7 @@ enable_all()
     if [ "$IS_BUILT" = no ]; then
         if [ "$HAS_FLAG" = no ]; then
             # remove all services, keeping console if considered built
-            if console_enabled; then
+            if [ "$CONSOLE_CONFIGURED" == true ] && console_enabled; then
                 # shellcheck disable=SC2143
                 if [ -n "$("${COMPOSE_BIN[@]}" ps --services | grep -v -Fxe console)" ]; then
                     passthru "${COMPOSE_BIN[*]}  ps --services | grep -v -Fxe console | xargs ${COMPOSE_BIN[*]} rm --force --stop --"
@@ -44,7 +51,7 @@ enable_all()
             fi
         fi
 
-        if [ "$HAS_ASSETS" = yes ]; then
+        if [ "$CONSOLE_CONFIGURED" == true ] && [ "$HAS_ASSETS" = yes ]; then
             ws assets download
         fi
 
@@ -59,11 +66,18 @@ enable_all()
         fi
 
         passthru "${COMPOSE_BIN[@]}" up -d
-        passthru "${COMPOSE_BIN[@]}" exec -T -u build console app welcome
+        if [ "$CONSOLE_CONFIGURED" == true ]; then
+            passthru "${COMPOSE_BIN[@]}" exec -T -u build console app welcome
+        fi
     fi
 }
 
 enable_console() {
+    if [ "$CONSOLE_CONFIGURED" == false ]; then
+        echo "error: console is not configured to be enabled" >&2
+        exit 1
+    fi
+
     if [ "$APP_BUILD" = dynamic ] && console_enabled && [ -z "$("${COMPOSE_BIN[@]}" ps --quiet --all console)" ]; then
         rm .my127ws/.flag-console-built
     fi
@@ -105,7 +119,9 @@ dynamic()
 {
     ws external-images pull
 
-    dynamic_console
+    if [ "$CONSOLE_CONFIGURED" == true ]; then
+        dynamic_console
+    fi
 
     passthru "ws app build"
 }
@@ -128,11 +144,13 @@ initial_start()
     # Bring up all services apart from cron
     passthru "${COMPOSE_BIN[*]} config --services | grep -v -Fxe cron | xargs ${COMPOSE_BIN[*]} up -d"
 
-    passthru "${COMPOSE_BIN[@]}" exec -T -u build console app init
+    if [ "$CONSOLE_CONFIGURED" == true ]; then
+        passthru "${COMPOSE_BIN[@]}" exec -T -u build console app init
+    fi
 
-    {% if @('services.cron.enabled') %}
-    passthru "${COMPOSE_BIN[@]}" up -d cron
-    {% endif %}
+    if service_configured cron; then
+        passthru "${COMPOSE_BIN[@]}" up -d cron
+    fi
 }
 
 "enable_$1"

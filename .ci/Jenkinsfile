@@ -33,6 +33,8 @@ pipeline {
                 sh '.ci/test dynamic'
                 sh '.ci/test dynamic mutagen'
                 sh '.ci/test static-all-services'
+                sh '.ci/test static-console-disabled'
+                sh '.ci/test dynamic-console-disabled'
                 milestone(20)
             }
         }
@@ -51,8 +53,14 @@ pipeline {
                 stage('Mutagen') {
                     steps { sh '.ci/test dynamic mutagen' }
                 }
-                stage('Static All Services') {
+                stage('Static - All Services') {
                     steps { sh '.ci/test static-all-services' }
+                }
+                stage('Static - Console disabled') {
+                    steps { sh '.ci/test static-console-disabled' }
+                }
+                stage('Dynamic - Console disabled') {
+                    steps { sh '.ci/test dynamic-console-disabled' }
                 }
             }
         }

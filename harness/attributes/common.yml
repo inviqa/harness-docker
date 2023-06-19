@@ -27,7 +27,7 @@ attributes.default:
       buildkit:
         enabled: true
     tests:
-      isolated: true
+      isolated: = @('services.console.enabled')
       use_global_services: false
 
   pipeline:
