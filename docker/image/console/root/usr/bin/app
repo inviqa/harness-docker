@@ -8,8 +8,8 @@ main()
 
 bootstrap()
 {
-    . /lib/sidekick.sh
-    . /lib/functions.sh
+    . /usr/lib/sidekick.sh
+    . /usr/lib/functions.sh
 }
 
 bootstrap
