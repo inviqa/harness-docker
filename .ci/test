@@ -67,9 +67,12 @@ function test_harness_acceptance()
     prepare_environment
     if (cd "${path_test}" && docker compose config --services) | grep -Fxe console; then
       install_console
+      run_project_quality_tests
+      install_environment
+    else
+      install_environment
+      run_project_quality_tests
     fi
-    run_project_quality_tests
-    install_environment
     check_environment_started "$mode"
     run_project_acceptance_tests
     restart_environment
