@@ -1,7 +1,9 @@
 #!/bin/bash
 
-set -e
-set -x
+set -o errexit
+set -o nounset
+set -o pipefail
+set -o xtrace
 
 export path_test=".ci/tmp-test"
 
@@ -62,9 +64,15 @@ function test_harness_acceptance()
     local mode="$1"
     local sync="$2"
 
-    install_console
-    run_project_quality_tests
-    install_environment
+    prepare_environment
+    if (cd "${path_test}" && docker compose config --services) | grep -Fxe console; then
+      install_console
+      run_project_quality_tests
+      install_environment
+    else
+      install_environment
+      run_project_quality_tests
+    fi
     check_environment_started "$mode"
     run_project_acceptance_tests
     restart_environment
