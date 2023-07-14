@@ -67,7 +67,7 @@ enable_all()
 
         passthru "${COMPOSE_BIN[@]}" up -d
         if [ "$CONSOLE_CONFIGURED" == true ]; then
-            passthru "${COMPOSE_BIN[@]}" exec -T -u build console app welcome
+            passthru "${COMPOSE_BIN[@]}" exec -T -u "${CODE_OWNER}" console app welcome
         fi
     fi
 }
@@ -106,7 +106,7 @@ dynamic_console()
     find .my127ws/docker/image/ -type d ! -perm u+rwx,go+rx,o-w -exec chmod u+rwx,go+rx,o-w {} +
 
     passthru "${COMPOSE_BIN[@]}" up --build -d console
-    passthru "${COMPOSE_BIN[@]}" exec -T -u build console app build
+    passthru "${COMPOSE_BIN[@]}" exec -T -u "${CODE_OWNER}" console app build
 
     if [ "$USE_MUTAGEN" = yes ]; then
         ws mutagen resume
@@ -145,7 +145,7 @@ initial_start()
     passthru "${COMPOSE_BIN[*]} config --services | grep -v -Fxe cron | xargs ${COMPOSE_BIN[*]} up -d"
 
     if [ "$CONSOLE_CONFIGURED" == true ]; then
-        passthru "${COMPOSE_BIN[@]}" exec -T -u build console app init
+        passthru "${COMPOSE_BIN[@]}" exec -T -u "${CODE_OWNER}" console app init
     fi
 
     if service_configured cron; then
