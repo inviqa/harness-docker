@@ -256,6 +256,7 @@ attributes.default:
 
     elasticsearch:
       enabled: true
+      claimName: "{{ $.Release.Name }}-elasticsearch-pv-claim" # legacy naming
       accessMode: ReadWriteOnce
       size: 2Gi
     mongodb:
@@ -264,22 +265,27 @@ attributes.default:
       size: 1Gi
     mysql:
       enabled: true
+      claimName: "{{ $.Release.Name }}-mysql-pv-claim" # legacy naming
       accessMode: ReadWriteOnce
       size: 4Gi
     rabbitmq:
       enabled: true
+      claimName: "{{ $.Release.Name }}-rabbitmq-pv-claim" # legacy naming
       accessMode: ReadWriteOnce
       size: 2Gi
     postgres:
       enabled: true
+      claimName: "{{ $.Release.Name }}-postgres-pv-claim" # legacy naming
       accessMode: ReadWriteOnce
       size: 4Gi
     redis:
       enabled: false
+      claimName: "{{ $.Release.Name }}-redis-pv-claim" # legacy naming
       accessMode: ReadWriteOnce
       size: 2Gi
     redis-session:
       enabled: true
+      claimName: "{{ $.Release.Name }}-redis-session-pv-claim" # legacy naming
       accessMode: ReadWriteOnce
       size: 2Gi
     solr-data:

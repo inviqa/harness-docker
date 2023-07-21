@@ -12,6 +12,7 @@ The following attributes were moved to a new key:
 * `pipeline.base.services.mysql.options` -> `pipeline.base.services.mysql.config.options`
 * `replicas.varnish` -> `pipeline.base.services.varnish.replicas` # however the value has been removed, as the default is 1
 * `services.mysql.options` -> `services.mysql.config.options`
+* `persistence.solr` -> `persistence.solr-data`
 
 As such, they have also been moved in the helm values to their respective global and services configuration maps.
 
