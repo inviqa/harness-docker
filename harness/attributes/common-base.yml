@@ -282,7 +282,7 @@ attributes.default:
       enabled: true
       accessMode: ReadWriteOnce
       size: 2Gi
-    solr:
+    solr-data:
       enabled: true
       accessMode: ReadWriteOnce
       size: 1Gi

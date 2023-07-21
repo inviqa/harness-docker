@@ -76,28 +76,7 @@ spec:
 {{- with $.Values.persistence.solr -}}
 {{- if .enabled }}
   volumeClaimTemplates:
-    - metadata:
-        name: {{ $.Release.Name }}-solr-data
-        labels:
-          {{- include "chart.selectors" $ | nindent 10 }}
-          app.kubernetes.io/component: solr
-          app.service: {{ $.Release.Name }}-solr
-      spec:
-        accessModes:
-          - {{ .accessMode | quote }}
-        resources:
-          requests:
-            storage: {{ .size | quote }}
-        {{- if .storageClass }}
-        {{- if (eq "-" .storageClass) }}
-        storageClassName: ""
-        {{- else }}
-        storageClassName: {{ .storageClass | quote }}
-        {{- end }}
-        {{- end }}
-        {{- with (pick . "selector" "volumeMode" "volumeName") }}
-        {{- . | toYaml | nindent 8 }}
-        {{- end }}
+    - {{ include "statefulset.volumeClaimTemplate" (dict "root" $ "name" "solr-data" "serviceName" "solr") | nindent 8 }}
 {{- end }}
 {{- end }}
 
