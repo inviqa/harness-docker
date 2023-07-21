@@ -10,6 +10,11 @@ attributes.default:
     #   production  - leaner images with less tooling and application is run in production mode
     mode: development
 
+    # The user/group to use for code
+    code_owner: build
+    code_owner_group: = @('app.code_owner')
+    code_owner_home: "= '/home/' ~ @('app.code_owner')"
+
     services: []
 
   task:

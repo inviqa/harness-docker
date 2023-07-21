@@ -12,7 +12,7 @@ services:
     command: [sleep, infinity]
     volumes:
       - {{ (syncvolume) ? @('workspace.name') ~ '-sync:/app:nocopy' : ('./:/app' ~ @('docker.compose.host_volume_options')) }}
-      - ./.my127ws/application:/home/build/application
+      - ./.my127ws/application:{{ @('app.code_owner_home') }}/application
       - ./.my127ws/docker/image/console/root/usr/lib/task:/usr/lib/task
       - ./.my127ws:/.my127ws
 {% else %}

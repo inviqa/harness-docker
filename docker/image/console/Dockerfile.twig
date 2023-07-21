@@ -1,9 +1,16 @@
 FROM {{ @('services.console.build.from') }}
 
+ENV CODE_OWNER={{ @('app.code_owner') }}
+ENV CODE_OWNER_GROUP={{ @('app.code_owner') }}
+
+USER root
+
 COPY .my127ws/docker/image/console/root /
-RUN useradd build \
+
+RUN (getent group "${CODE_OWNER_GROUP}" >/dev/null 2>&1 || groupadd "${CODE_OWNER_GROUP}") \
+ && (getent passwd "${CODE_OWNER}" >/dev/null 2>&1 || useradd --gid "${CODE_OWNER_GROUP}" --home-dir '{{ @('app.code_owner_home') }}' "${CODE_OWNER}") \
  && mkdir -p /app \
- && chown -R build:build /home/build /app \
+ && chown -R "${CODE_OWNER}:${CODE_OWNER_GROUP}" /app \
  && apt-get update && apt-get install --no-install-recommends -y ca-certificates curl rsync \
  && apt-get auto-remove -qq -y \
  && apt-get clean \
@@ -21,15 +28,16 @@ ENV APP_MODE={{ @('app.mode') }} \
 {%- endfor %}
 {% endif %}
 
-USER build
+USER {{ @('app.code_owner')}}
+COPY --chown={{ @('app.code_owner')}}:{{ @('app.code_owner_group')}} .my127ws/docker/image/console/home {{ @('app.code_owner_home')}}
 
 {% if @('app.build') == 'static' %}
-COPY --chown=build:build .my127ws/application  /home/build/application
-COPY --chown=build:build ./                    /app
+COPY --chown={{ @('app.code_owner')}}:{{ @('app.code_owner_group')}} .my127ws/application  {{ @('app.code_owner_home')}}/application
+COPY --chown={{ @('app.code_owner')}}:{{ @('app.code_owner_group')}} ./                    /app
 RUN app build
 {% else %}
 VOLUME /app
-VOLUME /home/build/application
+VOLUME {{ @('app.code_owner_home')}}/application
 {% endif %}
 
 USER root
