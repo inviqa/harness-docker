@@ -6,7 +6,7 @@ ENV CODE_OWNER_GROUP={{ @('app.code_owner') }}
 USER root
 
 COPY .my127ws/docker/image/console/root /
-COPY .my127ws/docker/image/console/home {{ @('app.code_owner_home')}}
+
 RUN (getent group "${CODE_OWNER_GROUP}" >/dev/null 2>&1 || groupadd "${CODE_OWNER_GROUP}") \
  && (getent passwd "${CODE_OWNER}" >/dev/null 2>&1 || useradd --gid "${CODE_OWNER_GROUP}" --home-dir '{{ @('app.code_owner_home') }}' "${CODE_OWNER}") \
  && mkdir -p /app \
@@ -29,6 +29,7 @@ ENV APP_MODE={{ @('app.mode') }} \
 {% endif %}
 
 USER {{ @('app.code_owner')}}
+COPY --chown={{ @('app.code_owner')}}:{{ @('app.code_owner_group')}} .my127ws/docker/image/console/home {{ @('app.code_owner_home')}}
 
 {% if @('app.build') == 'static' %}
 COPY --chown={{ @('app.code_owner')}}:{{ @('app.code_owner_group')}} .my127ws/application  {{ @('app.code_owner_home')}}/application
