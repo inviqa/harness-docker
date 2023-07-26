@@ -40,6 +40,8 @@ VOLUME /app
 VOLUME {{ @('app.code_owner_home')}}/application
 {% endif %}
 
+WORKDIR /app
+
 USER root
 
 RUN chmod +x /entrypoint.sh
