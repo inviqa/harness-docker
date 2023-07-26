@@ -1,31 +1,3 @@
-{{- with .Values.persistence.redis -}}
-{{- if and .enabled ($.Values.services | dig "redis" "enabled" false) }}
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: {{ $.Release.Name }}-redis-pv-claim
-  labels:
-    {{- include "chart.labels" $ | nindent 4 }}
-    app.kubernetes.io/component: redis
-    app.service: {{ $.Release.Name }}-redis
-spec:
-  accessModes:
-    - {{ .accessMode | quote }}
-  resources:
-    requests:
-      storage: {{ .size | quote }}
-{{- if .storageClass }}
-{{- if (eq "-" .storageClass) }}
-  storageClassName: ""
-{{- else }}
-  storageClassName: {{ .storageClass | quote }}
-{{- end }}
-{{- end }}
-{{- if .selector }}
-  selector:
-  {{- .selector | toYaml | nindent 4 }}
-{{- end }}
-
-{{- end }}
-
+{{- if .Values.services | dig "redis" "enabled" false }}
+{{- include "resource.persistentVolumeClaim" (dict "root" $ "name" "redis") }}
 {{- end }}
