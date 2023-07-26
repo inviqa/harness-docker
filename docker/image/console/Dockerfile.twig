@@ -1,4 +1,4 @@
-FROM {{ @('services.console.build.from') }}
+FROM {{ @('services.console.build.from') }} as console
 
 ENV CODE_OWNER={{ @('app.code_owner') }}
 ENV CODE_OWNER_GROUP={{ @('app.code_owner') }}
