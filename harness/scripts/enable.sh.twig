@@ -83,7 +83,6 @@ enable_console() {
     fi
 
     passthru ws networks external
-    passthru ws external-images pull console
     "${APP_BUILD}_console"
 }
 
@@ -105,7 +104,7 @@ dynamic_console()
 
     find .my127ws/docker/image/ -type d ! -perm u+rwx,go+rx,o-w -exec chmod u+rwx,go+rx,o-w {} +
 
-    passthru "${COMPOSE_BIN[@]}" up --build -d console
+    passthru "${COMPOSE_BIN[@]}" up --build --pull="${PULL}" -d console
     passthru "${COMPOSE_BIN[@]}" exec -T -u "${CODE_OWNER}" console app build
 
     if [ "$USE_MUTAGEN" = yes ]; then
@@ -117,8 +116,6 @@ dynamic_console()
 
 dynamic()
 {
-    ws external-images pull
-
     if [ "$CONSOLE_CONFIGURED" == true ]; then
         dynamic_console
     fi
@@ -131,7 +128,6 @@ static_console()
     if [ "$HAS_ASSETS" = yes ]; then
         ws assets download
     fi
-    passthru "${COMPOSE_BIN[@]}" up --build -d console
 }
 
 static()

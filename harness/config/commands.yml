@@ -11,6 +11,7 @@ command('enable'):
     COMPOSE_PROJECT_NAME: = @('namespace')
     COMPOSE_DOCKER_CLI_BUILD: = @('docker.buildkit.enabled') ? '1':'0'
     DOCKER_BUILDKIT:          = @('docker.buildkit.enabled') ? '1':'0'
+    PULL: = @('docker.pull')
   exec: |
     #!bash(workspace:/)
     set -- all

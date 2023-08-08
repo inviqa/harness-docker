@@ -1,9 +1,15 @@
-function('built_images', [services]): |
+function('built_images', [compose_bin]): |
   #!php
+  $configRaw = shell_exec($compose_bin . ' config');
+  if ($configRaw === null) {
+    exit(1);
+  }
+  $config = \Symfony\Component\Yaml\Yaml::parse($configRaw);
+
   $builtImages = [];
 
-  foreach ($services as $service) {
-    if ($service['image'] && count($service['upstream']) > 0) {
+  foreach ($config['services'] as $serviceName => $service) {
+    if ($service['image'] && $service['build']) {
       $builtImages[] = $service['image'];
     }
   }
@@ -14,7 +20,7 @@ function('built_images', [services]): |
 
 command('built-images ls'):
   env:
-    IMAGES: = built_images(docker_service_images(@('docker.compose.bin')))
+    IMAGES: = built_images(@('docker.compose.bin'))
   exec: |
     #!bash
     echo "$IMAGES"

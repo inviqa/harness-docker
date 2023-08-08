@@ -117,6 +117,7 @@ attributes.default:
     image_pull_config: = @('docker.config')
     port_forward:
       enabled: "= @('app.build') == 'dynamic'"
+    pull: "= env('CI', 'local') || env('JOB_ID', 'local') ? 'missing' : 'always'" 
 
   backend:
     path: /app

@@ -1,16 +1,17 @@
 command('app build'):
   env:
     COMPOSE_BIN: = @('docker.compose.bin')
+    PULL: = @('docker.pull')
   exec: |
     #!bash(workspace:/)|@
-    ws external-images pull
 
-    passthru $COMPOSE_BIN build
+    passthru $COMPOSE_BIN build --pull="${PULL}"
 
 command('app build <service>'):
   env:
     COMPOSE_BIN: = @('docker.compose.bin')
-    SERVICE:    = input.argument('service')
+    SERVICE: = input.argument('service')
+    PULL: = @('docker.pull')
   exec: |
     #!bash(workspace:/)|@
-    passthru $COMPOSE_BIN build "${SERVICE}"
+    passthru $COMPOSE_BIN build --pull="${PULL}" "${SERVICE}"

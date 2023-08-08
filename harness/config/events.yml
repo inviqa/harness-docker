@@ -7,8 +7,8 @@ after('harness.refresh'):
   env:
     COMPOSE_BIN: = @('docker.compose.bin')
     COMPOSE_PROJECT: = @('namespace')
+    PULL: = @('docker.pull')
   exec: |
     #!bash(workspace:/)|@
     run $COMPOSE_BIN stop
-    ws external-images pull
-    run $COMPOSE_BIN up -d --build
+    run $COMPOSE_BIN up -d --build --pull="${PULL}"
