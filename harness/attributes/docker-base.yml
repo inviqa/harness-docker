@@ -65,10 +65,26 @@ attributes.default:
         memory: "1024Mi"
     redis:
       image: redis:5-alpine
+      config:
+        options: 
+          maxmemory: '1073742000'
+          maxmemory-policy: allkeys-lru
+          save: 
+            - ['3600', '1']
+            - ['300', '100']
+            - ['60', '10000']
       resources:
         memory: "256Mi"
     redis-session:
       image: redis:5-alpine
+      config:
+        options: 
+          maxmemory: '1073742000'
+          maxmemory-policy: volatile-ttl
+          save: 
+            - ['3600', '1']
+            - ['300', '100']
+            - ['60', '10000']
       resources:
         memory: "1024Mi"
     relay:
@@ -118,8 +134,6 @@ attributes.default:
           scope: = @('helm.sealed_secrets.scope')
       configMaps: {}
       services:
-        mysql:
-          config: = @('services.mysql.config')
         relay:
           enabled: false
     production:

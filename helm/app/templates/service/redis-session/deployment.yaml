@@ -27,24 +27,19 @@ spec:
         app.service: {{ $.Release.Name }}-redis-session
     spec:
       containers:
-      - args:
+      - name: redis-session
+        args:
         - redis-server
-        - --maxmemory
-        - "1073742000"
-        - --maxmemory-policy
-        - volatile-ttl
-        - --save
-        - "3600"
-        - "1"
-        - --save
-        - "300"
-        - "100"
-        - --save
-        - "60"
-        - "10000"
+        {{- range $var, $value := .config.options }}
+        {{- range $optValue := kindIs "slice" $value | ternary $value (list $value) }}
+        - {{ print "--" $var | quote }}
+        {{- range $arrayValue := kindIs "slice" $optValue | ternary $optValue (list $optValue) }}
+        - {{ $arrayValue | quote }}
+        {{- end }}
+        {{- end }}
+        {{- end }}
         image: {{ .image | quote }}
         imagePullPolicy: Always
-        name: redis-session
         ports:
         - containerPort: 6379
         resources:

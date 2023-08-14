@@ -77,6 +77,7 @@ function('filter_local_services', [services]): |
     $filteredService = [];
     foreach ($service as $key => $value) {
       switch ($key) {
+        case 'config':
         case 'enabled':
         case 'environment':
         case 'environment_dynamic':
