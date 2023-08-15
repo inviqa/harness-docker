@@ -57,6 +57,9 @@ spec:
           limits:
             memory: {{ .resources.memory }}
           requests:
+            {{- with (.resources | dig "cpu" "request" nil) }}
+            cpu: {{ . }}
+            {{- end }}
             memory: {{ .resources.memory }}
         readinessProbe:
           exec:
