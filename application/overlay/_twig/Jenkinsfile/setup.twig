@@ -5,4 +5,5 @@
                 sh 'ws enable console'
                 milestone(10)
             }
+            post { failure { script { failureMessages << 'Development environment console' } } }
         }

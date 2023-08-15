@@ -41,5 +41,6 @@
                 }
 {% endif %}
             }
+            post { failure { script { failureMessages << 'Publish' } } }
         }
 {% endif %}

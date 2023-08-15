@@ -18,5 +18,6 @@
                     sh 'ws app deploy qa'
                 }
             }
+            post { failure { script { failureMessages << 'Deploy QA' } } }
         }
 {% endif %}

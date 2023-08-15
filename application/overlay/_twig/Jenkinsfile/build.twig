@@ -11,4 +11,5 @@
 {% endif %}
                 milestone(20)
             }
+            post { failure { script { failureMessages << 'Development environment install' } } }
         }
