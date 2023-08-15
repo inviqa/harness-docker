@@ -29,6 +29,7 @@ spec:
     spec:
       containers:
       - name: redis
+        {{- include "service.environment" (dict "root" $ "serviceName" "redis" "service" .) | nindent 8 }}
         args:
         - redis-server
         {{- range $var, $value := .config.options }}

@@ -88,14 +88,14 @@ stringData:
 {{- end }}
 
 {{- define "service.environment" }}
-{{- with (mergeOverwrite (dict) .service.environment .service.environment_dynamic)}}
+{{- with (mergeOverwrite (dict) .service.environment .service.environment_dynamic) -}}
 env:
 {{- range $key, $value := . }}
 - name: {{ $key | quote }}
 {{- if kindIs "string" $value }}
   value: {{ tpl $value $.root | quote }}
 {{- else if kindIs "map" $value }}
-  {{ tpl ($value | toYaml) $.root | nindent 10 }}
+  {{- tpl ($value | toYaml) $.root | nindent 2 }}
 {{- else }}
   value: {{ $value | quote }}
 {{- end }}
@@ -105,10 +105,10 @@ env:
 envFrom:
   {{- if .service.environment_secrets }}
   - secretRef:
-      name: {{ print $.Release.Name "-" .serviceName }}
+      name: {{ print $.root.Release.Name "-" .serviceName }}
   {{- end }}
   {{- with .service.envFrom }}
-  {{- tpl (. | toYaml) $ | nindent 10 }}
+  {{- tpl (. | toYaml) $.root | nindent 2 }}
   {{- end }}
 {{- end }}
 {{- end }}
