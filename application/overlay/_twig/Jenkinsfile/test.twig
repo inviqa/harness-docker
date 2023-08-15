@@ -2,9 +2,15 @@
             parallel {
 {% if not @('jenkins.tests.isolated') %}
 {% if @('services.lighthouse.enabled') %}
-                stage('lighthouse') { steps { sh 'ws lighthouse' } }
+                stage('lighthouse') { 
+                    steps { sh 'ws lighthouse' } 
+                    post { failure { script { failureMessages << 'Lighthouse tests' } } }
+                }
 {% endif %}
 {% endif %}
-                stage('helm kubeval app')  { steps { sh 'ws helm kubeval --cleanup app' } }
+                stage('helm kubeval app')  { 
+                    steps { sh 'ws helm kubeval --cleanup app' }
+                    post { failure { script { failureMessages << 'Helm chart rendering' } } }
+                }
             }
         }

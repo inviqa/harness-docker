@@ -1,7 +1,10 @@
 {% if @('services.lighthouse.enabled') %}
         stage('End-to-end Test') {
             parallel {
-                stage('lighthouse') { steps { sh 'ws lighthouse' } }
+                stage('lighthouse') {
+                    steps { sh 'ws lighthouse' }
+                    post { failure { script { failureMessages << 'Lighthouse tests' } } }
+                }
             }
         }
 {% endif %}
