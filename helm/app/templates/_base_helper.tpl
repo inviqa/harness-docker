@@ -88,7 +88,7 @@ stringData:
 {{- end }}
 
 {{- define "service.environment" }}
-{{- with (mergeOverwrite (dict) .service.environment .service.environment_dynamic) -}}
+{{- with (mergeOverwrite (dict) (deepCopy (.service.environment | default (dict))) (deepCopy (.service.environment_dynamic | default (dict)))) -}}
 env:
 {{- range $key, $value := . }}
 - name: {{ $key | quote }}
