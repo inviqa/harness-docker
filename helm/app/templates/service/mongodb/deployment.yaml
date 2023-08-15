@@ -60,7 +60,7 @@ spec:
       - name: data-db
 {{- if $.Values.persistence.mongodb.enabled }}
         persistentVolumeClaim:
-          claimName: {{ tpl $.Values.persistence.mongodb.claimName $ | default (print $.Release.Name "-mongodb") | quote }}
+          claimName: {{ tpl ($.Values.persistence.mongodb.claimName | default "") $ | default (print $.Release.Name "-mongodb") | quote }}
 {{- else }}
         emptyDir: {}
 {{- end }}

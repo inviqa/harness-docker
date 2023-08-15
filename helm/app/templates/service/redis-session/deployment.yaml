@@ -60,7 +60,7 @@ spec:
       - name: redis-data
 {{- if index $.Values.persistence "redis-session" "enabled" }}
         persistentVolumeClaim:
-          claimName: {{ tpl (index $.Values.persistence "redis-session" "claimName") $ | default (print $.Release.Name "-redis-session") | quote }}
+          claimName: {{ tpl (index $.Values.persistence "redis-session" "claimName" | default "") $ | default (print $.Release.Name "-redis-session") | quote }}
 {{- else }}
         emptyDir: {}
 {{- end }}
