@@ -69,8 +69,8 @@ attributes.default:
         options:
           # Handle many smaller keys
           activedefrag: 'yes'
-          # 1Gi - 1024*1024*1024 bytes
-          maxmemory: '1073741824'
+          # 170Mi - 170*1024*1024 bytes
+          maxmemory: '178257920'
           # Evict any least recently used key even if they don't have a TTL
           maxmemory-policy: allkeys-lru
           # Save snapshots every X changes have happened within Y seconds (these are the defaults in redis.conf)
@@ -84,15 +84,15 @@ attributes.default:
           #   - ['3600', '1', '300', '100', '60', '10000']
       resources:
         # 1.5 * maxmemory to allow copy on write snapshots
-        memory: "1.5Gi"
+        memory: "256Mi"
     redis-session:
       image: redis:6-alpine
       config:
         options: 
           # Handle many smaller keys
           activedefrag: 'yes'
-          # 1Gi - 1024*1024*1024 bytes
-          maxmemory: '1073741824'
+          # 170Mi - 170*1024*1024 bytes
+          maxmemory: '178257920'
           # Evict key that would expire soonest
           maxmemory-policy: volatile-ttl
           # Save snapshots every X changes have happened within Y seconds (these are the defaults in redis.conf)
@@ -106,7 +106,7 @@ attributes.default:
           #   - ['3600', '1', '300', '100', '60', '10000']
       resources:
         # 1.5 * maxmemory to allow copy on write snapshots
-        memory: "1.5Gi"
+        memory: "256Mi"
     relay:
       enabled: true
       publish: false
