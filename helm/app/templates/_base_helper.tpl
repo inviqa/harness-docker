@@ -87,6 +87,32 @@ stringData:
 {{- end }}
 {{- end }}
 
+{{- define "service.environment" }}
+{{- with (mergeOverwrite (dict) .service.environment .service.environment_dynamic)}}
+env:
+{{- range $key, $value := . }}
+- name: {{ $key | quote }}
+{{- if kindIs "string" $value }}
+  value: {{ tpl $value $.root | quote }}
+{{- else if kindIs "map" $value }}
+  {{ tpl ($value | toYaml) $.root | nindent 10 }}
+{{- else }}
+  value: {{ $value | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if or .service.environment_secrets .service.envFrom }}
+envFrom:
+  {{- if .service.environment_secrets }}
+  - secretRef:
+      name: {{ print $.Release.Name "-" .serviceName }}
+  {{- end }}
+  {{- with .service.envFrom }}
+  {{- tpl (. | toYaml) $ | nindent 10 }}
+  {{- end }}
+{{- end }}
+{{- end }}
+
 {{- define "pod.topologySpreadConstraints" }}
 {{- $topologySpreadConstraints := $.service.topologySpreadConstraints | default $.root.Values.global.topologySpreadConstraints }}
 {{- if eq (len $topologySpreadConstraints) 0 -}}

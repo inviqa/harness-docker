@@ -4,9 +4,11 @@ services:
     labels:
       # deprecated, a later workspace release will disable by default
       - traefik.enable=false
-    environment:
-      ES_JAVA_OPTS: -Xms512m -Xmx512m
-      discovery.type: single-node
+    environment: {{ to_nice_yaml(deep_merge([
+        @('services.elasticsearch.environment'),
+        @('services.elasticsearch.environment_dynamic'),
+        @('services.elasticsearch.environment_secrets')
+      ]), 2, 6) | raw }}
     networks:
       - private
 {% if @('app.build') != 'static' and @('docker.port_forward.enabled') %}

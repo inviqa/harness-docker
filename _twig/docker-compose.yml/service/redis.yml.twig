@@ -11,6 +11,11 @@ services:
   redis:
     image: {{ @('services.redis.image')  }}
     command: {{ to_nice_yaml(command, 2, 6) }}
+    environment: {{ to_nice_yaml(deep_merge([
+        @('services.redis.environment'),
+        @('services.redis.environment_dynamic'),
+        @('services.redis.environment_secrets')
+      ]), 2, 6) | raw }}
     labels:
       # deprecated, a later workspace release will disable by default
       - traefik.enable=false
