@@ -68,8 +68,16 @@ attributes.default:
           email: name@example.com
     preview:
       enabled: false
-      target_branches:
-        - = @('git.default_branch')
+
+      # Publish all PRs with the default target branch.
+      # Not recommended, as a waste of resources until needed
+      # target_branches:
+      #   - = @('git.default_branch')
+
+      # Limit publishing by pull request label
+      pull_request_labels:
+        - publish-preview
+
       environment: {}
       cluster:
         name: null
