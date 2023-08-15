@@ -57,7 +57,7 @@ spec:
       - name: elasticsearch-data
 {{- if $.Values.persistence.elasticsearch.enabled }}
         persistentVolumeClaim:
-          claimName: {{ $.Release.Name }}-elasticsearch-pv-claim
+          claimName: {{ tpl $.Values.persistence.elasticsearch.claimName $ | default (print $.Release.Name "-elasticsearch") | quote }}
 {{- else }}
         emptyDir: {}
 {{- end }}

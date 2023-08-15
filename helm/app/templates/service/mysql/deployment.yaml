@@ -68,7 +68,7 @@ spec:
       - name: mysql-data
 {{- if $.Values.persistence.mysql.enabled }}
         persistentVolumeClaim:
-          claimName: {{ $.Release.Name }}-mysql-pv-claim
+          claimName: {{ tpl $.Values.persistence.mysql.claimName $ | default (print $.Release.Name "-mysql") | quote }}
 {{- else }}
         emptyDir: {}
 {{- end }}
