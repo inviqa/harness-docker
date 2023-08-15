@@ -1,5 +1,5 @@
-{{ with index .Values.services "redis-session" }}
-{{ if .enabled }}
+{{- with index .Values.services "redis-session" }}
+{{- if .enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -17,5 +17,5 @@ spec:
     app.service: {{ $.Release.Name }}-redis-session
 status:
   loadBalancer: {}
-{{ end }}
-{{ end }}
+{{- end }}
+{{- end }}
