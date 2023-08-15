@@ -64,7 +64,7 @@ attributes.default:
       resources:
         memory: "1024Mi"
     redis:
-      image: redis:6-alpine
+      image: redis:7-alpine
       config:
         options:
           # Handle many smaller keys
@@ -75,20 +75,20 @@ attributes.default:
           maxmemory-policy: allkeys-lru
           # Save snapshots every X changes have happened within Y seconds (these are the defaults in redis.conf)
           # Redis < 7
-          # save: 
+          # save:
           #   - ['3600', '1']
           #   - ['300', '100']
           #   - ['60', '10000']
           # Redis >= 7
-          # save: 
+          # save:
           #   - ['3600', '1', '300', '100', '60', '10000']
       resources:
         # 1.5 * maxmemory to allow copy on write snapshots
         memory: "256Mi"
     redis-session:
-      image: redis:6-alpine
+      image: redis:7-alpine
       config:
-        options: 
+        options:
           # Handle many smaller keys
           activedefrag: 'yes'
           # 170Mi - 170*1024*1024 bytes
@@ -97,12 +97,12 @@ attributes.default:
           maxmemory-policy: volatile-ttl
           # Save snapshots every X changes have happened within Y seconds (these are the defaults in redis.conf)
           # Redis < 7
-          # save: 
+          # save:
           #   - ['3600', '1']
           #   - ['300', '100']
           #   - ['60', '10000']
           # Redis >= 7
-          # save: 
+          # save:
           #   - ['3600', '1', '300', '100', '60', '10000']
       resources:
         # 1.5 * maxmemory to allow copy on write snapshots
