@@ -10,9 +10,15 @@ services:
       - private
       - shared
     labels:
-      - traefik.backend={{ @('rabbitmq.host') }}-{{ @('workspace.name') }}
+      - co.elastic.logs/module=rabbitmq
+      - co.elastic.metrics/module=rabbitmq
+      # Traefik 1, deprecated
+      - traefik.backend={{ @('workspace.name') }}-rabbitmq
       - traefik.frontend.rule=Host:{{ @('rabbitmq.external_host') }}
       - traefik.docker.network=my127ws
       - traefik.port={{ @('rabbitmq.api_port') }}
-      - co.elastic.logs/module=rabbitmq
-      - co.elastic.metrics/module=rabbitmq
+      # Traefik 2
+      - traefik.enable=true
+      # - traefik.docker.network=my127ws
+      - traefik.http.routers.{{ @('workspace.name') }}-rabbitmq.rule=Host(`{{ @('rabbitmq.external_host') }}`)
+      - traefik.http.services.{{ @('workspace.name') }}-rabbitmq.loadbalancer.server.port={{ @('rabbitmq.api_port') }}
