@@ -26,6 +26,11 @@
                     branch '{{ @('pipeline.qa.branch') }}'
 {% endif %}
 {% if @('pipeline.preview.enabled') %}
+{% if @('pipeline.preview.pull_request_labels') %}
+                    expression {
+                        return env.CHANGE_ID && {{ @('pipeline.preview.pull_request_labels') | json_encode }}.any { pullRequest.labels.contains(it) }
+                    }
+{% endif %}
 {% for branch in @('pipeline.preview.target_branches') %}
                     changeRequest target: '{{ branch }}'
 {% endfor %}

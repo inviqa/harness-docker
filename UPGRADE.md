@@ -1,5 +1,13 @@
 # Upgrades
 
+## Upgrading from 0.2.x to 0.3.x
+
+### Preview environments are now only created if the PR has a `publish-preview` label
+
+In order to reduce waste in docker images and mess of cluster repositories, PRs will only be published (if preview enabled) when the PR has a `publish-preview` label.
+
+It is possible to change back to the original process of publishing all PRs by switching back to `target_branch` setting, but not recommended.
+
 ## Upgrading from 0.1.x to 0.2.x
 
 ### Attributes and helm values keys moved
