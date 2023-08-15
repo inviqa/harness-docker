@@ -1,4 +1,4 @@
-{{ if .Values.services | dig "mongodb" "enabled" false }}
+{{- if .Values.services | dig "mongodb" "enabled" false }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -18,4 +18,4 @@ spec:
     app.service: {{ $.Release.Name }}-mongodb
 status:
   loadBalancer: {}
-{{ end }}
+{{- end }}

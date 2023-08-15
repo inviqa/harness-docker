@@ -12,18 +12,18 @@ apiVersion: policy/v1beta1
 {{- end }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ print $.Release.Name "-" $serviceName }}
+  name: {{ print $.Release.Name "-" $serviceName | quote }}
   labels:
     {{- include "chart.labels" $ | nindent 4 }}
-    app.kubernetes.io/component: {{ $serviceName }}
-    app.service: {{ print $.Release.Name "-" $serviceName }}
+    app.kubernetes.io/component: {{ $serviceName | quote }}
+    app.service: {{ print $.Release.Name "-" $serviceName | quote }}
   annotations:
     argocd.argoproj.io/sync-wave: "15"
 spec:
-  minAvailable: {{ .minAvailable | default 1 }}
+  minAvailable: {{ .minAvailable | default 1 | int }}
   selector:
     matchLabels:
-      app.service: {{ print $.Release.Name "-" $serviceName }}
+      app.service: {{ print $.Release.Name "-" $serviceName | quote }}
 {{- end }}
 {{- end }}
 {{- end }}

@@ -11,11 +11,11 @@ apiVersion: autoscaling/v2beta2
 {{- end }}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: {{ print $.Release.Name "-" $serviceName }}
+  name: {{ print $.Release.Name "-" $serviceName | quote }}
   labels:
     {{- include "chart.labels" $ | nindent 4 }}
-    app.kubernetes.io/component: {{ $serviceName }}
-    app.service: {{ print $.Release.Name "-" $serviceName }}
+    app.kubernetes.io/component: {{ $serviceName | quote }}
+    app.service: {{ print $.Release.Name "-" $serviceName | quote }}
   annotations:
     argocd.argoproj.io/sync-wave: "15"
 spec:
@@ -45,7 +45,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ print $.Release.Name "-" $serviceName }}
+    name: {{ print $.Release.Name "-" $serviceName | quote }}
 {{- end }}
 {{- end }}
 {{- end }}
