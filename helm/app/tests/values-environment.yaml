@@ -1,0 +1,14 @@
+services:
+  mongodb:
+    environment_secrets:
+      SECRET: encrypted-foo
+  mysql:
+    environment:
+      NODE_NAME:
+        valueFrom:
+          fieldRef:
+            fieldPath: spec.nodeName
+  postgres:
+    envFrom:
+      - configMapRef:
+          name: special-config

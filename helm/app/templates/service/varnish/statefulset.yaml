@@ -34,6 +34,7 @@ spec:
       {{- end }}
       containers:
       - name: varnish
+        {{- include "service.environment" (dict "root" $ "serviceName" "varnish" "service" .) | nindent 8 }}
         image: {{ .image | quote }}
         imagePullPolicy: Always
         ports:

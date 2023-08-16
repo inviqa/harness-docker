@@ -13,6 +13,9 @@ attributes.default:
         memory: "1024Mi"
     elasticsearch:
       image: = @('elasticsearch.image') ~ ':' ~ @('elasticsearch.tag')
+      environment:
+        ES_JAVA_OPTS: -Xms512m -Xmx512m
+        discovery.type: single-node
       resources:
         memory: "1024Mi"
     lighthouse:

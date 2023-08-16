@@ -30,14 +30,10 @@ spec:
         fsGroup: 1000
         runAsUser: 1000
       containers:
-      - env:
-        - name: ES_JAVA_OPTS
-          value: -Xmx512m -Xms512m
-        - name: discovery.type
-          value: single-node
+      - name: elasticsearch
+        {{- include "service.environment" (dict "root" $ "serviceName" "elasticsearch" "service" .) | nindent 8 }}
         image: {{ .image | quote }}
         imagePullPolicy: Always
-        name: elasticsearch
         ports:
         - containerPort: 9200
         resources:

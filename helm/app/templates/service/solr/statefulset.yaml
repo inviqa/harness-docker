@@ -35,16 +35,7 @@ spec:
         runAsUser: 8983
       containers:
       - name: solr
-        env:
-        {{- range $key, $value := .environment }}
-        {{- $tp := typeOf $value }}
-        - name: {{ $key | quote }}
-        {{- if eq $tp "string" }}
-          value: {{ tpl $value $ | quote }}
-        {{- else}}
-          value: {{ $value | quote }}
-        {{- end }}
-        {{- end }}
+        {{- include "service.environment" (dict "root" $ "serviceName" "solr" "service" .) | nindent 8 }}
         image: {{ .image | quote }}
         imagePullPolicy: Always
         ports:
