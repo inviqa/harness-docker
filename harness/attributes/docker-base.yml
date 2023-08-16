@@ -64,29 +64,49 @@ attributes.default:
       resources:
         memory: "1024Mi"
     redis:
-      image: redis:5-alpine
+      image: redis:7-alpine
       config:
-        options: 
-          maxmemory: '1073742000'
+        options:
+          # Handle many smaller keys
+          activedefrag: 'yes'
+          # 170Mi - 170*1024*1024 bytes
+          maxmemory: '178257920'
+          # Evict any least recently used key even if they don't have a TTL
           maxmemory-policy: allkeys-lru
-          save: 
-            - ['3600', '1']
-            - ['300', '100']
-            - ['60', '10000']
+          # Save snapshots every X changes have happened within Y seconds (these are the defaults in redis.conf)
+          # Redis < 7
+          # save:
+          #   - ['3600', '1']
+          #   - ['300', '100']
+          #   - ['60', '10000']
+          # Redis >= 7
+          # save:
+          #   - ['3600', '1', '300', '100', '60', '10000']
       resources:
+        # 1.5 * maxmemory to allow copy on write snapshots
         memory: "256Mi"
     redis-session:
-      image: redis:5-alpine
+      image: redis:7-alpine
       config:
-        options: 
-          maxmemory: '1073742000'
+        options:
+          # Handle many smaller keys
+          activedefrag: 'yes'
+          # 170Mi - 170*1024*1024 bytes
+          maxmemory: '178257920'
+          # Evict key that would expire soonest
           maxmemory-policy: volatile-ttl
-          save: 
-            - ['3600', '1']
-            - ['300', '100']
-            - ['60', '10000']
+          # Save snapshots every X changes have happened within Y seconds (these are the defaults in redis.conf)
+          # Redis < 7
+          # save:
+          #   - ['3600', '1']
+          #   - ['300', '100']
+          #   - ['60', '10000']
+          # Redis >= 7
+          # save:
+          #   - ['3600', '1', '300', '100', '60', '10000']
       resources:
-        memory: "1024Mi"
+        # 1.5 * maxmemory to allow copy on write snapshots
+        memory: "256Mi"
     relay:
       enabled: true
       publish: false
@@ -141,10 +161,4 @@ attributes.default:
     qa:
       services: {}
     preview:
-      services:
-        redis:
-          resources:
-            memory: "64Mi"
-        redis-session:
-          resources:
-            memory: "64Mi"
+      services: {}
