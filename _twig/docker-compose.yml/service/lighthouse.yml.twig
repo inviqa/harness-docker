@@ -5,6 +5,7 @@ services:
     command: "/bin/true"
     environment:
       TARGET_URL: "{{ @('lighthouse.target.url') | raw }}"
+      OUTPUT_RESULTS: ~
 {% if @('app.build') == 'dynamic' %}
     volumes:
       - .my127ws/docker/image/lighthouse/root/app:/app
