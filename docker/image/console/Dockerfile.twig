@@ -34,7 +34,7 @@ COPY --chown={{ @('app.code_owner')}}:{{ @('app.code_owner_group')}} .my127ws/do
 {% if @('app.build') == 'static' %}
 COPY --chown={{ @('app.code_owner')}}:{{ @('app.code_owner_group')}} .my127ws/application  {{ @('app.code_owner_home')}}/application
 COPY --chown={{ @('app.code_owner')}}:{{ @('app.code_owner_group')}} ./                    /app
-RUN app build
+RUN SIDEKICK_VERBOSE=yes app build
 {% else %}
 VOLUME /app
 VOLUME {{ @('app.code_owner_home')}}/application
