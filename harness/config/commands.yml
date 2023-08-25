@@ -23,6 +23,7 @@ command('enable console'):
     APP_MODE:             = @('app.mode')
     NAMESPACE:            = @('namespace')
     HAS_ASSETS:           = boolToString(@('aws.bucket') !== null and @('aws.bucket'))
+    CODE_OWNER: = @('app.code_owner')
     COMPOSE_BIN: = @('docker.compose.bin')
     COMPOSE_PROJECT_NAME: = @('namespace')
     COMPOSE_DOCKER_CLI_BUILD: = @('docker.buildkit.enabled') ? '1':'0'
