@@ -19,7 +19,7 @@ function('host_architecture', [style]): |
 
 function('to_yaml', [data]): |
   #!php
-  $yaml = \Symfony\Component\Yaml\Yaml::dump($data, 100, 2));
+  $yaml = \Symfony\Component\Yaml\Yaml::dump($data, 100, 2);
   if (is_array($data) && count($data) > 0) {
     $yaml = "\n" . rtrim(preg_replace('/^/m', '  ', $yaml), "\n");
   }
