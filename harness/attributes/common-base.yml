@@ -143,28 +143,8 @@ attributes.default:
     port_forward:
       enabled: "= @('app.build') == 'dynamic'"
 
-  backend:
-    path: /app
-    build:
-      steps: []
-    install:
-      steps: []
-    init:
-      steps: []
-    migrate:
-      steps: []
-    cron:
-      jobs: []
-
   framework:
     readme_blocks: []
-
-  frontend:
-    path: /app
-    watch: npm run watch
-    build:
-      when: false
-      steps: []
 
   git:
     default_branch: develop
