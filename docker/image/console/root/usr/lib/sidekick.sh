@@ -62,7 +62,7 @@ run()
         local STDOUT_FILE=/tmp/my127ws-stdout.txt
         local STDERR_FILE=/tmp/my127ws-stderr.txt
 
-        if [ "$USER" != "$CODE_OWNER" ]; then
+        if [ "$(id -u -n)" != "$CODE_OWNER" ]; then
             STDOUT_FILE=/tmp/my127ws-${USER}-stdout.txt
             STDERR_FILE=/tmp/my127ws-${USER}-stderr.txt
         fi
