@@ -59,24 +59,34 @@ run()
 
         setCommandIndicator "${INDICATOR_RUNNING}"
 
-        if "${COMMAND[@]}" > /tmp/my127ws-stdout.txt 2> /tmp/my127ws-stderr.txt; then
+        local STDOUT_FILE=/tmp/my127ws-stdout.txt
+        local STDERR_FILE=/tmp/my127ws-stderr.txt
+        local USER
+        USER="$(id -u -n)"
+
+        if [ "$USER" != "$CODE_OWNER" ]; then
+            STDOUT_FILE=/tmp/my127ws-${USER}-stdout.txt
+            STDERR_FILE=/tmp/my127ws-${USER}-stderr.txt
+        fi
+
+        if "${COMMAND[@]}" > "$STDOUT_FILE" 2> "$STDERR_FILE"; then
             setCommandIndicator "${INDICATOR_SUCCESS}"
         else
             setCommandIndicator "${INDICATOR_ERROR}"
             if [ "${APP_BUILD}" = "static" ]; then
               echo "Command failed. stdout:"
-              cat /tmp/my127ws-stdout.txt
+              cat "$STDOUT_FILE"
               echo
               echo "stderr:"
-              cat /tmp/my127ws-stderr.txt
+              cat "$STDERR_FILE"
               echo
             else
               echo "Command failed. stderr:"
-              cat /tmp/my127ws-stderr.txt
+              cat "$STDERR_FILE"
               echo "----------------------------------"
               echo "Full logs are accessible in the console container at path :-"
-              echo "  stdout: /tmp/my127ws-stdout.txt"
-              echo "  stderr: /tmp/my127ws-stderr.txt"
+              echo "  stdout: ${STDOUT_FILE}"
+              echo "  stderr: ${STDERR_FILE}"
             fi
 
             return 1
