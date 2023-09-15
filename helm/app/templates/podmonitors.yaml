@@ -1,6 +1,10 @@
 {{- range $serviceName := (.Values.services | keys) -}}
 {{- with (include "service.resolved" (dict "root" $ "service_name" $serviceName) | fromYaml) }}
-{{- if and (not (hasPrefix "_" $serviceName)) $.Values.global.prometheus.podMonitoring (. | dig "metricsEnabled" true) .metricsEndpoints }}
+{{- if and (not (hasPrefix "_" $serviceName)) $.Values.global.prometheus.podMonitoring .enabled .metricsEnabled }}
+{{- $endpointServices := kindIs "slice" .containers  | ternary (list) (list .) }}
+{{- range .containers }}
+{{- $endpointServices = append $endpointServices (include "service.resolved" (dict "root" $ "service_name" .) | fromYaml)}}
+{{- end }}
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
@@ -15,7 +19,11 @@ spec:
     matchLabels:
       app.service: {{ print $.Release.Name "-" $serviceName | quote }}
   podMetricsEndpoints:
-    {{- .metricsEndpoints | toYaml | nindent 6 }}
+  {{- range $endpointServices }}
+  {{- if and (. | dig "enabled" true) .metricsEndpoints }}
+    {{- .metricsEndpoints | toYaml | nindent 4 }}
+  {{- end }}
+  {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
