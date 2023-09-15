@@ -1,0 +1,38 @@
+global:
+  prometheus:
+    podMonitoring: true
+
+services:
+  single-container:
+    enabled: true
+    metricsEnabled: true
+    metricsEndpoints:
+      - port: http-monitoring
+  
+  single-container-disabled:
+    enabled: false
+    metricsEnabled: true
+    metricsEndpoints:
+      - port: http-monitoring
+
+  multi-container-a:
+    metricsEndpoints:
+      - port: http-monitoring
+  
+  multi-container-b:
+    metricsEndpoints:
+      - path: /another-metrics
+        port: another-http-port
+  
+  multi-container-c:
+    enabled: false
+    metricsEndpoints:
+      - port: http-monitoring
+  
+  multi-container-pod:
+    enabled: true
+    containers:
+      - multi-container-a
+      - multi-container-b
+      - multi-container-c
+    metricsEnabled: true
