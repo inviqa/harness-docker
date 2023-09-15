@@ -17,5 +17,3 @@ configMaps: {{ to_nice_yaml(@('pipeline.base.configMaps'), 2, 2) | raw }}
 secrets: {}
 
 persistence: {{ to_nice_yaml(@('pipeline.base.persistence'), 2, 2) | raw }}
-
-istio: {{ to_nice_yaml(@('pipeline.base.istio'), 2, 2) | raw }}
