@@ -257,7 +257,7 @@ attributes.default:
     target_service: nginx
 
   persistence:
-    enabled: false
+    enabled: true
     mountVolumesOnConsole: true # possible to disable, but may lead to unexpected concequences with app init/migrate
 
     elasticsearch:
