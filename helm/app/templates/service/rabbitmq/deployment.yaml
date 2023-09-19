@@ -55,7 +55,7 @@ spec:
       - name: rabbitmq-data
 {{- if $.Values.persistence.rabbitmq.enabled }}
         persistentVolumeClaim:
-          claimName: {{ tpl ($.Values.persistence.rabbitmq.claimName | default "") $ | default (print $.Release.Name "-rabbitmq") | quote }}
+          claimName: {{ include "persistence.claimName" (dict "root" $ "name" "rabbitmq") | quote }}
 {{- else }}
         emptyDir: {}
 {{- end }}

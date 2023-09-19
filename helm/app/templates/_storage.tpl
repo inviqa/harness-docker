@@ -5,7 +5,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ tpl (.claimName | default "") $.root | default (print $.root.Release.Name "-" $.name) | quote }}
+  name: {{ include "persistence.claimName" $ | quote }}
   labels:
     {{- include "chart.labels" $.root | nindent 4 }}
     app.kubernetes.io/component: {{ $.serviceName | default $.name | quote }}
@@ -37,7 +37,7 @@ spec:
 {{- define "statefulSet.volumeClaimTemplate" }}
 {{- with index .root.Values.persistence .name }}
 metadata:
-  name: {{ tpl (.claimName | default "") $.root | default (print $.root.Release.Name "-" $.name) | quote }}
+  name: {{ include "persistence.claimName" $ | quote }}
   labels:
     {{- include "chart.selectors" $.root | nindent 4 }}
     app.kubernetes.io/component: {{ $.serviceName | default $.name | quote }}
@@ -62,4 +62,10 @@ spec:
   {{- . | toYaml | nindent 2 }}
 {{- end }}
 {{- end }}
+{{- end }}
+
+{{- define "persistence.claimName" -}}
+{{- with index .root.Values.persistence .name -}}
+{{- tpl (.claimName | default "") $.root | default (print $.root.Release.Name "-" $.name) -}}
+{{- end -}}
 {{- end }}
