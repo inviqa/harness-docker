@@ -53,7 +53,7 @@ spec:
       restartPolicy: Always
       volumes:
       - name: rabbitmq-data
-{{- if $.Values.persistence.rabbitmq.enabled }}
+{{- if and $.Values.persistence.enabled $.Values.persistence.rabbitmq.enabled }}
         persistentVolumeClaim:
           claimName: {{ include "persistence.claimName" (dict "root" $ "name" "rabbitmq") | quote }}
 {{- else }}
