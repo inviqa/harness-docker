@@ -31,7 +31,6 @@ spec:
 {{- end }}
 {{- end }}
 {{- end }}
-{{- end }}
 
 {{- define "statefulSet.volumeClaimTemplate" }}
 {{- with index .root.Values.persistence .name }}
@@ -59,5 +58,6 @@ spec:
 {{- end }}
 {{- with (pick . "selector" "volumeMode" "volumeName") }}
   {{- . | toYaml | nindent 2 }}
+{{- end }}
 {{- end }}
 {{- end }}
