@@ -1,5 +1,4 @@
 {{- define "resource.persistentVolumeClaim" }}
-{{- if .root.Values.persistence.enabled }}
 {{- with index .root.Values.persistence .name }}
 {{- if .enabled }}
 kind: PersistentVolumeClaim
@@ -28,7 +27,6 @@ spec:
 {{- end }}
 {{- with (pick . "selector" "volumeMode" "volumeName") }}
   {{- . | toYaml | nindent 2 }}
-{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
