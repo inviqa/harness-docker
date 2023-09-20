@@ -54,7 +54,7 @@ spec:
       - name: postgres-data
 {{- if $.Values.persistence.postgres.enabled }}
         persistentVolumeClaim:
-          claimName: {{ tpl ($.Values.persistence.postgres.claimName | default "") $ | default (print $.Release.Name "-postgres") | quote }}
+          claimName: {{ include "persistence.claimName" (dict "root" $ "name" "postgres") | quote }}
 {{- else }}
         emptyDir: {}
 {{- end }}
