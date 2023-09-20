@@ -7,7 +7,7 @@ services:
   some-jobs:
     enabled: true
     jobs:
-      app-init:
+      example-app-init:
         annotations:
           helm.sh/hook: "pre-install"
           helm.sh/hook-delete-policy: "before-hook-creation"
@@ -16,7 +16,7 @@ services:
         command:
           - app
           - init
-      app-migrate:
+      example-app-migrate:
         annotations:
           helm.sh/hook: "pre-upgrade"
           helm.sh/hook-delete-policy: "before-hook-creation"
