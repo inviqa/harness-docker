@@ -14,6 +14,29 @@ If you really would like to continue using the old command, you can set in your 
 attribute('docker.compose.bin'): docker-compose
 ```
 
+### Kubernetes persistence enabled by default
+
+Since it makes more sense for persistence to be enabled for environments, and previously backend service persistence was also enabled by default, persistence of application volumes is now also enabled by default.
+
+Both application and backend services have two enabled flags now, `persistence.enabled` for a global toggle, and `persistence.*.enabled` for an individual toggle.
+
+Since it's unlikely that the Kubernetes cluster you would be releasing to would support ReadWriteMany for it's default storageclass, you will need to define the PersistentVolumeClaim's storageClass, which may be, for example `nfs`. Not providing a storageClass or selector would fail to obtain a PersistentVolume for the claim, and so the Pod would never start.
+
+```diff
+ persistence:
+   app-data:
++    storageClass: nfs
+```
+
+Previously `persistence.enabled` was only used for application volumes, but now includes backend service volumes, so if you do need to disable application volume persistence without disabling service volume persistence, you need to individually disable the application persistence:
+
+```diff
+ persistence:
+-  enabled: false 
+   app-data:
++    enabled: false
+```
+
 ### Preview environments are now only created if the PR has a `publish-preview` label
 
 In order to reduce waste in docker images and mess of cluster repositories, PRs will only be published (if preview enabled) when the PR has a `publish-preview` label.
