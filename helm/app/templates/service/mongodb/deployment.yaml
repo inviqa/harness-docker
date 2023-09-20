@@ -52,7 +52,7 @@ spec:
       restartPolicy: Always
       volumes:
       - name: data-db
-{{- if $.Values.persistence.mongodb.enabled }}
+{{- if and $.Values.persistence.enabled $.Values.persistence.mongodb.enabled }}
         persistentVolumeClaim:
           claimName: {{ include "persistence.claimName" (dict "root" $ "name" "mongodb") | quote }}
 {{- else }}

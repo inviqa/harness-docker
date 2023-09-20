@@ -68,7 +68,7 @@ spec:
         emptyDir: {}
       topologySpreadConstraints: {{- (include "pod.topologySpreadConstraints" (dict "root" $ "serviceName" "solr" "service" .)) | nindent 8 }}
 {{- with $.Values.persistence.solr -}}
-{{- if .enabled }}
+{{- if and $.Values.persistence.enabled .enabled }}
   volumeClaimTemplates:
     - {{ include "statefulset.volumeClaimTemplate" (dict "root" $ "name" "solr-data" "serviceName" "solr") | nindent 8 }}
 {{- end }}

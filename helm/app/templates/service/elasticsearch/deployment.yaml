@@ -55,7 +55,7 @@ spec:
       restartPolicy: Always
       volumes:
       - name: elasticsearch-data
-{{- if $.Values.persistence.elasticsearch.enabled }}
+{{- if and $.Values.persistence.enabled $.Values.persistence.elasticsearch.enabled }}
         persistentVolumeClaim:
           claimName: {{ include "persistence.claimName" (dict "root" $ "name" "elasticsearch") | quote }}
 {{- else }}

@@ -60,7 +60,7 @@ spec:
       restartPolicy: Always
       volumes:
       - name: mysql-data
-{{- if $.Values.persistence.mysql.enabled }}
+{{- if and $.Values.persistence.enabled $.Values.persistence.mysql.enabled }}
         persistentVolumeClaim:
           claimName: {{ include "persistence.claimName" (dict "root" $ "name" "mysql") | quote }}
 {{- else }}
