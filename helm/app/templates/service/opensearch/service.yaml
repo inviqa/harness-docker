@@ -1,0 +1,17 @@
+{{- if .Values.services | dig "opensearch" "enabled" false }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "chart.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: opensearch
+    app.service: {{ .Release.Name }}-opensearch
+  name: {{ .Release.Name }}-opensearch
+spec:
+  ports:
+    - name: http
+      port: 9200
+      targetPort: http
+  selector:
+    app.service: {{ .Release.Name }}-opensearch
+{{- end }}

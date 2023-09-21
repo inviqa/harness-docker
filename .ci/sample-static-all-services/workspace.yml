@@ -18,6 +18,8 @@ attributes:
       enabled: true
     mysql:
       enabled: true
+    opensearch:
+      enabled: true
     postgres:
       enabled: true
     rabbitmq:

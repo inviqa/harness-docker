@@ -46,6 +46,15 @@ attributes.default:
         MYSQL_ROOT_PASSWORD: = @('database.root_pass')
       resources:
         memory: "512Mi"
+    opensearch:
+      image: = @('services.opensearch.repository') ~ ':' ~ @('services.opensearch.tag')
+      repository: opensearchproject/opensearch
+      tag: '2.9.0'
+      environment:
+        OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+        discovery.type: single-node
+      resources:
+        memory: "1024Mi"
     postgres:
       image: postgres:9.6
       environment:
