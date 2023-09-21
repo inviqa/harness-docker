@@ -274,6 +274,10 @@ attributes.default:
       claimName: "{{ $.Release.Name }}-mysql-pv-claim" # legacy naming
       accessMode: ReadWriteOnce
       size: 4Gi
+    opensearch-data:
+      enabled: true
+      accessMode: ReadWriteOnce
+      size: 2Gi
     rabbitmq:
       enabled: true
       claimName: "{{ $.Release.Name }}-rabbitmq-pv-claim" # legacy naming

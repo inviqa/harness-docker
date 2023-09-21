@@ -64,7 +64,7 @@ spec:
       volumes:
       - name: {{ include "persistence.claimName" (dict "root" $ "name" "opensearch-data") | quote }}
         emptyDir: {}
-{{- if and $.Values.persistence.enabled $.Values.persistence.opensearch.enabled }}
+{{- if and $.Values.persistence.enabled (index $.Values.persistence "opensearch-data" "enabled") }}
   volumeClaimTemplates:
     - {{ include "statefulSet.volumeClaimTemplate" (dict "root" $ "name" "opensearch-data" "serviceName" "opensearch") | nindent 8 }}
 {{- end }}
