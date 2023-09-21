@@ -67,11 +67,9 @@ spec:
       - name: {{ $.Release.Name }}-solr-data
         emptyDir: {}
       topologySpreadConstraints: {{- (include "pod.topologySpreadConstraints" (dict "root" $ "serviceName" "solr" "service" .)) | nindent 8 }}
-{{- with $.Values.persistence.solr -}}
-{{- if and $.Values.persistence.enabled .enabled }}
+{{- if and $.Values.persistence.enabled (index $.Values.persistence "solr-data" "enabled") }}
   volumeClaimTemplates:
-    - {{ include "statefulset.volumeClaimTemplate" (dict "root" $ "name" "solr-data" "serviceName" "solr") | nindent 8 }}
-{{- end }}
+    - {{ include "statefulSet.volumeClaimTemplate" (dict "root" $ "name" "solr-data" "serviceName" "solr") | nindent 8 }}
 {{- end }}
 
 {{- end }}
