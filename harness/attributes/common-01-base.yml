@@ -276,6 +276,7 @@ attributes.default:
       size: 4Gi
     opensearch-data:
       enabled: true
+      claimName: data # as a volumeClaimTemplate this becomes data-{release name}-opensearch-{pod number}
       accessMode: ReadWriteOnce
       size: 2Gi
     rabbitmq:
