@@ -274,6 +274,11 @@ attributes.default:
       claimName: "{{ $.Release.Name }}-mysql-pv-claim" # legacy naming
       accessMode: ReadWriteOnce
       size: 4Gi
+    opensearch-data:
+      enabled: true
+      claimName: data # as a volumeClaimTemplate this becomes data-{release name}-opensearch-{pod number}
+      accessMode: ReadWriteOnce
+      size: 2Gi
     rabbitmq:
       enabled: true
       claimName: "{{ $.Release.Name }}-rabbitmq-pv-claim" # legacy naming

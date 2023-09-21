@@ -1,0 +1,18 @@
+services:
+  opensearch:
+    image: {{ @('services.opensearch.image') }}
+    labels:
+      # deprecated, a later workspace release will disable by default
+      - traefik.enable=false
+    environment: {{ to_nice_yaml(deep_merge([
+        @('services.opensearch.environment'),
+        @('services.opensearch.environment_dynamic'),
+        @('services.opensearch.environment_secrets')
+      ]), 2, 6) | raw }}
+    networks:
+      - private
+{% if @('app.build') != 'static' and @('docker.port_forward.enabled') %}
+    ports:
+      - "127.0.0.1:0:9200"
+      - "127.0.0.1:0:9300"
+{% endif %}
