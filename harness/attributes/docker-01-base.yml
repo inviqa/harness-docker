@@ -49,7 +49,7 @@ attributes.default:
     opensearch:
       image: = @('services.opensearch.repository') ~ ':' ~ @('services.opensearch.tag')
       repository: opensearchproject/opensearch
-      tag: '2.9.0'
+      tag: '2'
       environment:
         OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
         discovery.type: single-node
