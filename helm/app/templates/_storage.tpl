@@ -26,7 +26,7 @@ spec:
   storageClassName: {{ .storageClass | quote }}
 {{- end }}
 {{- end }}
-{{- with (pick . "dataSourceRef" "selector" "volumeMode" "volumeName") }}
+{{- with (pick . "dataSource" "dataSourceRef" "selector" "volumeMode" "volumeName") }}
   {{- . | toYaml | nindent 2 }}
 {{- end }}
 {{- end }}
@@ -58,7 +58,7 @@ spec:
   storageClassName: {{ .storageClass | quote }}
 {{- end }}
 {{- end }}
-{{- with (pick . "dataSourceRef" "selector" "volumeMode" "volumeName") }}
+{{- with (pick . "dataSource" "dataSourceRef" "selector" "volumeMode" "volumeName") }}
   {{- . | toYaml | nindent 2 }}
 {{- end }}
 {{- end }}
