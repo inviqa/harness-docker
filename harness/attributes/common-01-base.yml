@@ -178,7 +178,7 @@ attributes.default:
     platform: mysql
     platform_version: >
       = @('database.platform') == 'mysql' ? '8.0'
-      : @('database.platform') == 'postgres' ? '16'
+      : @('database.platform') == 'postgres' ? '15'
       : null
     host: mysql
     port: 3306
