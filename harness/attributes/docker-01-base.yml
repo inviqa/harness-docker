@@ -24,7 +24,7 @@ attributes.default:
     memcached:
       image: memcached:1-alpine
     mongodb:
-      image: mongo:4.4
+      image: mongo:7.0
       environment:
         MONGO_INITDB_ROOT_USERNAME: admin
       environment_secrets:
