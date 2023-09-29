@@ -16,6 +16,14 @@ command('enable'):
     set -- all
     source .my127ws/harness/scripts/enable.sh
 
+command('version check'): |
+    #!php
+    if (!method_exists(my127\Workspace\Application::class, 'getVersion')) {
+      echo "Workspace versions prior to 0.3.1 not supported by this harness version\n";
+      echo "Please upgrade Workspace to continue\n";
+      exit(1);
+    }
+
 command('enable console'):
   env:
     USE_MUTAGEN:          = boolToString(@('host.os') == 'darwin' and @('mutagen'))
