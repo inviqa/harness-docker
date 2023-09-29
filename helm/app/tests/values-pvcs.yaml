@@ -1,2 +1,7 @@
 persistence:
   enabled: true
+  mysql:
+    create: false
+  postgres:
+    enabled: false
+    create: true

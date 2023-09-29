@@ -1,7 +1,7 @@
 {{- define "resource.persistentVolumeClaim" }}
 {{- if .root.Values.persistence.enabled }}
 {{- with index .root.Values.persistence .name }}
-{{- if .enabled }}
+{{- if . | dig "create" .enabled }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
