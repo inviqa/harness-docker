@@ -115,14 +115,9 @@ function check_environment_started()
 
     cd "${path_test}"
 
-    project="ci-sample-${mode}"
-    if [[ "$mode" == "static" ]]; then
-      project="$(git log -n 1 --pretty=format:'%H')"
-    fi
-
-    if [ "$(docker compose -p "$project" ps --all | grep -v "lighthouse" | grep -c Exit)" -gt 0 ]; then
+    if [ "$(docker compose ps --all | grep -v "lighthouse" | grep -c Exit)" -gt 0 ]; then
       echo 'Some containers failed to start'
-      docker compose -p "$project" ps --all
+      docker compose ps --all
       return 1
     fi
 )
