@@ -8,7 +8,6 @@ command('enable'):
     HAS_ASSETS:           = boolToString(@('aws.bucket') !== null and @('aws.bucket') !== '')
     CODE_OWNER: = @('app.code_owner')
     COMPOSE_BIN: = @('docker.compose.bin')
-    COMPOSE_PROJECT_NAME: = @('namespace')
     COMPOSE_DOCKER_CLI_BUILD: = @('docker.buildkit.enabled') ? '1':'0'
     DOCKER_BUILDKIT:          = @('docker.buildkit.enabled') ? '1':'0'
   exec: |
@@ -33,7 +32,6 @@ command('enable console'):
     HAS_ASSETS:           = boolToString(@('aws.bucket') !== null and @('aws.bucket'))
     CODE_OWNER: = @('app.code_owner')
     COMPOSE_BIN: = @('docker.compose.bin')
-    COMPOSE_PROJECT_NAME: = @('namespace')
     COMPOSE_DOCKER_CLI_BUILD: = @('docker.buildkit.enabled') ? '1':'0'
     DOCKER_BUILDKIT:          = @('docker.buildkit.enabled') ? '1':'0'
   exec: |
@@ -46,7 +44,6 @@ command('disable'):
     USE_MUTAGEN:          = boolToString(@('host.os') == 'darwin' and @('mutagen'))
     NAMESPACE:            = @('namespace')
     COMPOSE_BIN: = @('docker.compose.bin')
-    COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)
     source .my127ws/harness/scripts/disable.sh
@@ -56,7 +53,6 @@ command('destroy [--all]'):
     USE_MUTAGEN:          = boolToString(@('host.os') == 'darwin' and @('mutagen'))
     NAMESPACE:            = @('namespace')
     COMPOSE_BIN: = @('docker.compose.bin')
-    COMPOSE_PROJECT_NAME: = @('namespace')
     DESTROY_ALL:          = boolToString(input.option('all'))
   exec: |
     #!bash(workspace:/)|@
@@ -67,7 +63,6 @@ command('rebuild'):
     USE_MUTAGEN:          = boolToString(@('host.os') == 'darwin' and @('mutagen'))
     NAMESPACE:            = @('namespace')
     COMPOSE_BIN: = @('docker.compose.bin')
-    COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
     source .my127ws/harness/scripts/rebuild.sh
@@ -87,7 +82,6 @@ command('exec %'):
   env:
     CODE_OWNER: = @('app.code_owner')
     COMPOSE_BIN: = @('docker.compose.bin')
-    COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|=
     if [ -t 0 ] && [ -t 1 ] ; then
@@ -99,7 +93,6 @@ command('exec %'):
 command('logs %'):
   env:
     COMPOSE_BIN: = @('docker.compose.bin')
-    COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(harness:/)|=
     $COMPOSE_BIN logs ={input.argument('%')}
@@ -107,7 +100,6 @@ command('logs %'):
 command('ps'):
   env:
     COMPOSE_BIN: = @('docker.compose.bin')
-    COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
     $COMPOSE_BIN ps
@@ -116,7 +108,6 @@ command('console'):
   env:
     CODE_OWNER: = @('app.code_owner')
     COMPOSE_BIN: = @('docker.compose.bin')
-    COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
     passthru $COMPOSE_BIN exec -u "${CODE_OWNER}" console bash
@@ -133,7 +124,6 @@ command('db-console'): |
 command('db console'):
   env:
     COMPOSE_BIN: = @('docker.compose.bin')
-    COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
     passthru "$COMPOSE_BIN exec console bash -c 'mysql --host \"\$DB_HOST\" --user \"\$DB_USER\" -p\"\$DB_PASS\" \"\$DB_NAME\"'"
@@ -161,7 +151,6 @@ command('assets upload'):
 command('port <service>'):
   env:
     COMPOSE_BIN: = @('docker.compose.bin')
-    COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|=
     passthru docker port "$($COMPOSE_BIN ps -q ={input.argument('service')})"
@@ -190,15 +179,12 @@ command('db import <database_file>'):
   env:
     CODE_OWNER: = @('app.code_owner')
     COMPOSE_BIN: = @('docker.compose.bin')
-    COMPOSE_PROJECT_NAME: = @('namespace')
     DATABASE_FILE: = input.argument('database_file')
   exec: |
     #!bash(workspace:/)|=
     passthru $COMPOSE_BIN exec -u "${CODE_OWNER}" console app database:import "$DATABASE_FILE"
 
 command('harness update existing'):
-  env:
-    COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
     ws disable
@@ -213,8 +199,6 @@ command('harness update existing'):
     ws exec app welcome
 
 command('harness update fresh'):
-  env:
-    COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
     ws disable || true
@@ -243,7 +227,6 @@ command('generate token <length>'):
 command('lighthouse [--with-results]'):
   env:
     COMPOSE_BIN: = @('docker.compose.bin')
-    COMPOSE_PROJECT_NAME: = @('namespace')
     OUTPUT_RESULTS:       = boolToString(input.option('with-results'))
   exec: |
     #!bash(workspace:/)|@
