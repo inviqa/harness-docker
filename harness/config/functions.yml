@@ -25,9 +25,16 @@ function('to_yaml', [data]): |
   }
   = $yaml;
 
-function('to_nice_yaml', [data, indentation, nesting]): |
+function('to_nice_yaml', [data, indentation, nesting, flags]): |
   #!php
-  $yaml = \Symfony\Component\Yaml\Yaml::dump($data, 100, $indentation ?: 2);
+  $flagBitmap = 0;
+  foreach ($flags ?: [] as $flag) {
+    if (is_string($flag)) {
+      $flag = constant(\Symfony\Component\Yaml\Yaml::class . '::' . $flag);
+    }
+    $flagBitmap |= $flag;
+  }
+  $yaml = \Symfony\Component\Yaml\Yaml::dump($data, 100, $indentation == null ? 2 : $indentation, $flagBitmap);
   if (is_array($data) && count($data) > 0) {
     $yaml = "\n" . rtrim(preg_replace('/^/m', str_repeat(' ', $nesting === null ? 2 : $nesting), $yaml), "\n");
   }
