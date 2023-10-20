@@ -1,4 +1,4 @@
-{% set command = @('services.redis-session.config.options')
+{% set command = @('services.redis.config.options')
   | filter(v => v is not empty)
   | map(
     (value, var) => (value is iterable ? value : [value]) 
