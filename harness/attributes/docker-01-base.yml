@@ -12,7 +12,9 @@ attributes.default:
       resources:
         memory: "1024Mi"
     elasticsearch:
-      image: = @('elasticsearch.image') ~ ':' ~ @('elasticsearch.tag')
+      image: = @('services.elasticsearch.repository') ~ ':' ~ @('services.elasticsearch.tag')
+      repository: elasticsearch
+      tag: 7.17.13
       environment:
         ES_JAVA_OPTS: -Xms512m -Xmx512m
         discovery.type: single-node

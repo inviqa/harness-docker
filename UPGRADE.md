@@ -2,6 +2,13 @@
 
 ## Upgrading from 0.2.x to 0.3.x
 
+### Attributes moved
+
+The following attributes were moved to a new key:
+
+* `elasticsearch.image` -> `services.elasticsearch.repository`
+* `elasticsearch.tag` -> `services.elasticsearch.tag`
+
 ### Major updates of mongodb and postgres due to EOL
 
 Both mongodb 4.4 and postgres 9.6 are end-of-life (EOL), and so receiving no security updates.
