@@ -9,7 +9,10 @@ metadata:
   labels:
     {{- include "chart.labels" $.root | nindent 4 }}
     app.kubernetes.io/component: {{ $.serviceName | default $.name | quote }}
-    app.service: {{ print $.root.Release.Name "-" ($.serviceName | default $.name) | quote}}
+    app.service: {{ print $.root.Release.Name "-" ($.serviceName | default $.name) | quote }}
+    {{- with .labels }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
   {{- with (pick . "annotations") }}
   {{- . | toYaml | nindent 2 }}
   {{- end }}
@@ -41,7 +44,10 @@ metadata:
   labels:
     {{- include "chart.selectors" $.root | nindent 4 }}
     app.kubernetes.io/component: {{ $.serviceName | default $.name | quote }}
-    app.service: {{ print $.root.Release.Name "-" ($.serviceName | default $.name) | quote}}
+    app.service: {{ print $.root.Release.Name "-" ($.serviceName | default $.name) | quote }}
+    {{- with .labels }}
+    {{- . | toYaml | nindent 4 }}
+    {{- end }}
   {{- with (pick . "annotations") }}
   {{- . | toYaml | nindent 2 }}
   {{- end }}
