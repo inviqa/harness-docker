@@ -112,11 +112,6 @@ command('console'):
     #!bash(workspace:/)|@
     passthru $COMPOSE_BIN exec -u "${CODE_OWNER}" console bash
 
-command('composer %'):
-  exec: |
-    #!bash(workspace:/)|=
-    passthru ws exec composer ={ input.argument('%') }
-
 command('db-console'): |
   #!bash
   ws db console
@@ -193,8 +188,11 @@ command('harness update existing'):
     ws harness prepare
     touch .my127ws/.flag-built
     ws refresh
+    ws harness post-update
+
+command('harness post-update'):
+  exec: |
     ws exec app overlay:apply
-    ws exec composer install
     ws exec app migrate
     ws exec app welcome
 
