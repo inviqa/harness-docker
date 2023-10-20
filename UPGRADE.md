@@ -2,6 +2,36 @@
 
 ## Upgrading from 0.2.x to 0.3.x
 
+### Major updates of mongodb and postgres due to EOL
+
+Both mongodb 4.4 and postgres 9.6 are end-of-life (EOL), and so receiving no security updates.
+
+They have been upgraded to supported major versions in this harness (mongodb 5.0 and postgres 15)
+
+The upgrade process for these are not automated, and so you will need to manage these updates.
+
+If you are only using them for local development, then it may be as easy as dumping their data stores and restoring after upgrade, however if you have these in Kubernetes clusters, then you may need to plan a non-destructive upgrade.
+
+* mongodb
+  * See MongoDB's release notes for upgrading, [standalone upgrade](https://www.mongodb.com/docs/v7.0/release-notes/5.0-upgrade-standalone/)
+* postgres
+  * We recommend a database dump and restore. Whilst pg_upgrade can be used to upgrade from 9.6 to 15, it needs the 9.6 binaries in the same container as 15 to do so.
+
+You can postpone their upgrade, to be instead done in a separate step, by setting in your workspace.yml:
+
+mongodb:
+```
+attribute('services.mongodb.image'): mongo:4.4
+```
+
+postgres:
+```
+attribute('database.platform_version'): '9.6' # if database.platform is set to `postgres`
+attribute('services.postgres.image'): postgres:9.6
+```
+
+For mongodb, please consider upgrading further than 5.0 if you can, so that you don't need to do this process often. We've only set to 5.0 as getting to 7.0 would require successive upgrades of 5.0, 6.0, and 7.0. These will be targetted in future harness minor releases.
+
 ### `docker-compose` command now `docker compose`
 
 In line with the preferred way to run Docker Compose v2, the harness will now use the binary from it's Docker plugin architecture.
