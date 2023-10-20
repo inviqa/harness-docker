@@ -9,7 +9,7 @@ metadata:
   labels:
     {{- include "chart.labels" $.root | nindent 4 }}
     app.kubernetes.io/component: {{ $.serviceName | default $.name | quote }}
-    app.service: {{ print $.root.Release.Name "-" ($.serviceName | default $.name) | quote}}
+    app.service: {{ print $.root.Release.Name "-" ($.serviceName | default $.name) | quote }}
     {{- with .labels }}
     {{- . | toYaml | nindent 4 }}
     {{- end }}
