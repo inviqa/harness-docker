@@ -8,6 +8,9 @@ The following attributes were moved to a new key:
 
 * `elasticsearch.image` -> `services.elasticsearch.repository`
 * `elasticsearch.tag` -> `services.elasticsearch.tag`
+* `pipeline.publish.chart.git.ssh_credential_id` -> `pipeline.clusters.*.git.ssh_credential_id`
+* `pipeline.publish.chart.git.ssh_private_key` -> `pipeline.clusters.*.git.ssh_private_key`
+* `pipeline.publish.chart.git.repository` -> `pipeline.clusters.*.git.repository`
 
 ### Major updates of mongodb and postgres due to EOL
 
@@ -56,6 +59,32 @@ attribute('docker.compose.bin'): docker-compose
 Postgres 9.6 has been EOL since 2021-11-11, so the default Postgres version has been updated to 15.
 
 It's possible if you are using postgres service that some internal data structures need to be upgraded to work with the new version. If functionality doesn't work after upgrade, then you will need to upgrade the database or for a short term update the tag back to 9.6 to plan it separately.
+
+### `ws app publish chart <cluster> <branch> <commit message>` and `pipeline.clusters`
+
+Some projects need to deploy to multiple Kubernetes clusters, so multiple cluster repositories need to be defined.
+
+As due to this, the process for adding the first cluster repository has changed:
+
+```diff
+ pipeline:
++  clusters:
++    mycluster:
++      git:
++        ssh_credential_id: ...
++        repository: ...
+   publish:
+     chart:
+       enabled: true
++      default_cluster: mycluster
+-      git:
+-        ssh_credential_id: ...
+-        repository: ....
+```
+
+Additional clusters can be added to pipeline.clusters, however currently still you need to define Jenkinsfile stages for these to fit in your deployment pipeline.
+
+The `ws app publish chart` command has now an additional first argument of the cluster name, in order to publish to the specified cluster.
 
 ### Kubernetes persistence enabled by default
 

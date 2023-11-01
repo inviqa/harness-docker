@@ -9,10 +9,10 @@ command('app publish'):
     passthru $COMPOSE_BIN push @('pipeline.publish.services')
     run docker logout '@('docker.registry.url')'
 
-command('app publish chart <release> <message>'):
+command('app publish chart <cluster> <release> <message>'):
   env:
-    SSH_PRIVATE_KEY:    = @('pipeline.publish.chart.git.ssh_private_key')
-    REPOSITORY: = @('pipeline.publish.chart.git.repository')
+    SSH_PRIVATE_KEY:    = @('pipeline.clusters.' ~ input.argument('cluster') ~ '.git.ssh_private_key')
+    REPOSITORY: = @('pipeline.clusters.' ~ input.argument('cluster') ~ '.git.repository')
     ARTIFACTS_PATH:  = "./build-artifacts-repository/" ~ @('pipeline.publish.chart.git.path') ~ "/" ~ input.argument('release')
     MESSAGE:    = input.argument('message')
     GIT_USER_NAME: = @('pipeline.publish.chart.git.user_name')

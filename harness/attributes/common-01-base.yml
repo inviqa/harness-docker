@@ -56,6 +56,16 @@ attributes.default:
     base:
       persistence: = @('persistence')
       hostname:  = @('pipeline.preview.hostname')
+    clusters: {}
+      # pipeline:
+      #   git:
+      #     # A SSH Username with private key Jenkins credential id.
+      #     # Preferred over ssh_private_key to store credentials local development doesn't need
+      #     ssh_credential_id: ~
+      #     # private key with write access to the repository
+      #     ssh_private_key: = @('pipeline.publish.chart.git.key')
+      #     # eg. git@github.com:organisation/project.git
+      #     repository: ~
     publish:
       enabled: false
       services: = publishable_services(@('services'))
@@ -69,17 +79,12 @@ attributes.default:
       # to the given git repository.
       chart:
         enabled: false
+        # The cluster name from pipeline.clusters that the chart should be published to automatically after merge or as preview release
+        default_cluster: ~ # e.g pipeline
         git:
-          # A SSH Username with private key Jenkins credential id.
-          # Preferred over ssh_private_key to store credentials local development doesn't need
-          ssh_credential_id: ~
-          # private key with write access to the repository
-          ssh_private_key: = @('pipeline.publish.chart.git.key')
-          # eg. git@github.com:organisation/project.git
-          repository: ~
           # path within the repository to place the chart, no leading or trailing slashes
           # note: an additional directory with the branch name will be created
-          path: = 'build-artifacts/' ~ @('workspace.name')
+          path: = 'build-artifacts/' ~ @('workspace.name') 
           # sets the git user.name and user.email before pushing the commit
           user_name: Jenkins
           email: name@example.com
