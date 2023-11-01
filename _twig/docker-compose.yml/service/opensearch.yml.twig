@@ -8,7 +8,7 @@ services:
         @('services.opensearch.environment'),
         @('services.opensearch.environment_dynamic'),
         @('services.opensearch.environment_secrets')
-      ]), 2, 6) | raw }}
+      ]), 2, 6) }}
     networks:
       - private
 {% if @('app.build') != 'static' and @('docker.port_forward.enabled') %}

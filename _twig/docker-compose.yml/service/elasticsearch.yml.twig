@@ -8,7 +8,7 @@ services:
         @('services.elasticsearch.environment'),
         @('services.elasticsearch.environment_dynamic'),
         @('services.elasticsearch.environment_secrets')
-      ]), 2, 6) | raw }}
+      ]), 2, 6) }}
     networks:
       - private
 {% if @('app.build') != 'static' and @('docker.port_forward.enabled') %}

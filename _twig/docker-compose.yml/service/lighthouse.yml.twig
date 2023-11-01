@@ -4,7 +4,7 @@ services:
     entrypoint: "/usr/bin/dumb-init --"
     command: "/bin/true"
     environment:
-      TARGET_URL: "{{ @('lighthouse.target.url') | raw }}"
+      TARGET_URL: "{{ @('lighthouse.target.url') }}"
       OUTPUT_RESULTS: ~
 {% if @('app.build') == 'dynamic' %}
     volumes:

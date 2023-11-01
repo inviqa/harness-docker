@@ -1,9 +1,9 @@
 {% if @('pipeline.production.global') %}
-global: {{ to_nice_yaml(@('pipeline.production.global'), 2, 2) | raw }}  
+global: {{ to_nice_yaml(@('pipeline.production.global'), 2, 2) }}  
 {% endif %}
 {% if @('pipeline.production.services') %}
-services: {{ to_nice_yaml(@('pipeline.production.services'), 2, 2) | raw }}  
+services: {{ to_nice_yaml(@('pipeline.production.services'), 2, 2) }}  
 {% endif %}
 {% if @('pipeline.production.persistence') %}
-persistence: {{ to_nice_yaml(@('pipeline.production.persistence'), 2, 2) | raw }}
+persistence: {{ to_nice_yaml(@('pipeline.production.persistence'), 2, 2) }}
 {% endif %}

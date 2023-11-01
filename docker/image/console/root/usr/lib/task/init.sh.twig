@@ -9,7 +9,7 @@ function task_init()
         task assets:apply
 
         {% for step in @('backend.init.steps') -%}
-        {{ step|raw }}
+        {{ step }}
         {% endfor %}
 
         task welcome

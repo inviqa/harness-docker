@@ -14,13 +14,13 @@ function task_build()
 
     cd /app
 
-    if {{ @('task.build.when')|raw }}; then 
+    if {{ @('task.build.when') }}; then 
         :
     else
         return 0;
     fi
 
     {% for step in @('task.build.steps') -%}
-    {{ step|raw }}
+    {{ step }}
     {% endfor %}
 }

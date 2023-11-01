@@ -5,7 +5,7 @@ services:
         @('services.rabbitmq.environment'),
         @('services.rabbitmq.environment_dynamic'),
         @('services.rabbitmq.environment_secrets')
-      ]), 2, 6) | raw }}
+      ]), 2, 6) }}
     networks:
       - private
       - shared

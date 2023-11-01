@@ -10,7 +10,7 @@ services:
         @('services.solr.environment'),
         @('services.solr.environment_dynamic'),
         @('services.solr.environment_secrets')
-      ]), 2, 6) | raw }}
+      ]), 2, 6) }}
     labels:
       # Traefik 1, deprecated
       - traefik.backend={{ @('workspace.name') }}-solr
