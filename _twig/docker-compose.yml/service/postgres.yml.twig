@@ -8,7 +8,7 @@ services:
         @('services.postgres.environment'),
         @('services.postgres.environment_dynamic'),
         @('services.postgres.environment_secrets')
-      ]), 2, 6) | raw }}
+      ]), 2, 6) }}
     networks:
       - private
 {% if @('app.build') != 'static' and @('docker.port_forward.enabled') %}

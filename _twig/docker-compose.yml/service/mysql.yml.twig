@@ -13,7 +13,7 @@ services:
         @('services.mysql.environment'),
         @('services.mysql.environment_dynamic'),
         @('services.mysql.environment_secrets')
-      ]), 2, 6) | raw }}
+      ]), 2, 6) }}
     networks:
       - private
 {% if @('app.build') != 'static' and @('docker.port_forward.enabled') %}

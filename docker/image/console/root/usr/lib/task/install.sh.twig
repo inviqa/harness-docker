@@ -5,7 +5,7 @@ function task_install()
     task database:available
 
     {% for step in @('backend.install.steps') -%}
-    {{ step|raw }}
+    {{ step }}
     {% endfor %}
 
 }

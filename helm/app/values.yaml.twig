@@ -1,19 +1,19 @@
-appVersion: {{ @('app.version') | json_encode | raw }}
+appVersion: {{ @('app.version') | json_encode }}
 
-ingresses: {{ to_nice_yaml(@('pipeline.base.ingresses'), 2, 2) | raw }}
+ingresses: {{ to_nice_yaml(@('pipeline.base.ingresses'), 2, 2) }}
 
-global: {{ to_nice_yaml(@('pipeline.base.global'), 2, 2) | raw }}
+global: {{ to_nice_yaml(@('pipeline.base.global'), 2, 2) }}
 
 docker:
-  image_pull_config: {{ @('docker.image_pull_config') | raw }}
+  image_pull_config: {{ @('docker.image_pull_config') }}
 
 services: {{ to_nice_yaml(deep_merge([
     filter_local_services(@('services')),
     @('pipeline.base.services')
-  ]), 2, 2) | raw }}
+  ]), 2, 2) }}
 
-configMaps: {{ to_nice_yaml(@('pipeline.base.configMaps'), 2, 2) | raw }}
+configMaps: {{ to_nice_yaml(@('pipeline.base.configMaps'), 2, 2) }}
 
 secrets: {}
 
-persistence: {{ to_nice_yaml(@('pipeline.base.persistence'), 2, 2) | raw }}
+persistence: {{ to_nice_yaml(@('pipeline.base.persistence'), 2, 2) }}

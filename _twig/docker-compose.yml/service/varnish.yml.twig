@@ -20,7 +20,7 @@ services:
       @('services.varnish.environment'),
       @('services.varnish.environment_dynamic'),
       @('services.varnish.environment_secrets')
-      ]), 2, 6) | raw }}
+      ]), 2, 6) }}
     links:
       - {{ @('varnish.target_service') }}:{{ @('varnish.target_service') }}
     volumes:

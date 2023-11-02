@@ -4,7 +4,7 @@ run_steps()
 {
     # run any command required to be executed at docker startup
     {% for step in @('console.entrypoint.steps') -%}
-    {{ step|raw }}
+    {{ step }}
     {% else -%}
     :
     {% endfor %}
