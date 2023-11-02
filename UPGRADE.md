@@ -54,12 +54,6 @@ If you really would like to continue using the old command, you can set in your 
 attribute('docker.compose.bin'): docker-compose
 ```
 
-### Services updated to latest versions
-
-Postgres 9.6 has been EOL since 2021-11-11, so the default Postgres version has been updated to 15.
-
-It's possible if you are using postgres service that some internal data structures need to be upgraded to work with the new version. If functionality doesn't work after upgrade, then you will need to upgrade the database or for a short term update the tag back to 9.6 to plan it separately.
-
 ### `ws app publish chart <cluster> <branch> <commit message>` and `pipeline.clusters`
 
 Some projects need to deploy to multiple Kubernetes clusters, so multiple cluster repositories need to be defined.
