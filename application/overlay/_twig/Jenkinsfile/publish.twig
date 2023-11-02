@@ -1,8 +1,9 @@
 {% if @('pipeline.publish.enabled') %}
         stage('Publish') {
 {% set env = @('pipeline.publish.environment') %}
+{% set cluster = @('pipeline.publish.chart.default_cluster') %}
 {% set docker_registry_credential_id = @('docker.registry.credential_id') %}
-{% set ssh_credential_id = @('pipeline.publish.chart.git.ssh_credential_id') %}
+{% set ssh_credential_id = @('pipeline.clusters.' ~ cluster ~ '.git.ssh_credential_id') %}
 {% if env or docker_registry_credential_id or ssh_credential_id %}
             environment {
 {% for key, value in env %}
@@ -41,8 +42,8 @@
                 milestone(50)
                 sh 'ws app publish'
 {% if @('pipeline.publish.chart.enabled') %}
-                lock(resource: '{{ @('pipeline.publish.chart.git.repository') }}', inversePrecedence: true) {
-                    sh 'ws app publish chart "${GIT_BRANCH}" "{{ @('workspace.name') }} build artifact ${GIT_COMMIT}"'
+                lock(resource: '{{ @('pipeline.clusters.' ~ cluster ~ '.git.repository') }}', inversePrecedence: true) {
+                    sh 'ws app publish chart "{{ cluster }}" "${GIT_BRANCH}" "{{ @('workspace.name') }} build artifact ${GIT_COMMIT}"'
                 }
 {% endif %}
             }
