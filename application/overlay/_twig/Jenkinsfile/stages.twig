@@ -1,14 +1,14 @@
 {% set blocks  = 'application/overlay/_twig/Jenkinsfile/' %}
 
 {% if @('jenkins.tests.isolated') %}
-{% include blocks ~ 'setup.twig' %}
-{% include blocks ~ 'test.twig' %}
-{% include blocks ~ 'build.twig' %}
-{% include blocks ~ 'test-end-to-end.twig' %}
+{% include blocks ~ 'stages/setup.twig' %}
+{% include blocks ~ 'stages/test.twig' %}
+{% include blocks ~ 'stages/build.twig' %}
+{% include blocks ~ 'stages/test-end-to-end.twig' %}
 {% else %}
-{% include blocks ~ 'build.twig' %}
-{% include blocks ~ 'test.twig' %}
+{% include blocks ~ 'stages/build.twig' %}
+{% include blocks ~ 'stages/test.twig' %}
 {% endif %}
 
-{% include blocks ~ 'publish.twig' %}
-{% include blocks ~ 'deploy.twig' %}
+{% include blocks ~ 'stages/publish.twig' %}
+{% include blocks ~ 'stages/deploy.twig' %}
