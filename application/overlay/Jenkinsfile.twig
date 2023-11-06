@@ -1,28 +1,43 @@
 {% set blocks  = 'application/overlay/_twig/Jenkinsfile/' %}
-def failureMessages = []
-pipeline {
-    agent { label 'linux-amd64' }
-    environment {
-        COMPOSE_DOCKER_CLI_BUILD = {{ @('jenkins.docker.buildkit.enabled') ? '1' : '0' }}
-        DOCKER_BUILDKIT = {{ @('jenkins.docker.buildkit.enabled') ? '1' : '0' }}
-        {% if @('jenkins.credentials.my127ws_key') %}
-        MY127WS_KEY = credentials('{{ @('jenkins.credentials.my127ws_key') }}')
-        {% endif %}
-        MY127WS_ENV = "pipeline"
-    }
-    triggers { cron(env.BRANCH_NAME == '{{ @('git.default_branch') }}' ? 'H H(2-6) * * 1' : '') }
-    stages {
-{% include blocks ~ 'stages.twig' %}
-    }
-    post {
-{% if @('jenkins.notifications.slack.channel') and @('jenkins.notifications.slack.token_credential_id') %}
-        failure {
-{% include blocks ~ 'slack-notification.twig' %}
-        }
-{% endif %}
-        always {
-            sh 'ws destroy'
-            cleanWs()
+{% extends blocks ~ 'base.twig' %}
+
+{#
+{% block agent %}
+    agent {
+        docker {
+            label 'linux-amd64'
+            alwaysPull true
+            image 'quay.io/inviqa_images/workspace:latest'
+            args '--group-add docker --entrypoint "" --volume /var/run/docker.sock:/var/run/docker.sock --volume "$HOME/.my127:/root/.my127"'
         }
     }
-}
+{% endblock %}
+
+{% block stages %}
+        stage('Build, Test') {
+            when {
+                anyOf {
+                    triggeredBy 'TimerTrigger'
+                    allOf {
+                        not { branch 'main' }
+                    }
+                }
+            }
+            stages {
+                {% include blocks ~ 'stages-build-test.twig' %}
+            }
+        }
+        stage('Publish, Release') {
+            when {
+                not { triggeredBy 'TimerTrigger' }
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
+                }
+            }
+            stages {
+                {% include blocks ~ 'stages-publish-release.twig' %}
+            }
+        }
+{% endblock %}
+#}
