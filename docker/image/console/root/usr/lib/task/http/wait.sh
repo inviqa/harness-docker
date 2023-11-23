@@ -9,7 +9,7 @@ function task_http_wait() {
     while ! curl --fail --silent --show-error --location --insecure --output /dev/null "$@"; do
 
         if (( counter > 60 )); then
-            (>&2 echo "timeout while waiting on $1 to become available")
+            echo "timeout while waiting on $1 to become available" >&2
             exit 1
         fi
 

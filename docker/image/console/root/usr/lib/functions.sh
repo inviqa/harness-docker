@@ -9,7 +9,7 @@ function db_hasSchema()
         SQL="SELECT CASE WHEN COUNT(*) = 0 THEN 'no' ELSE 'yes' END FROM information_schema.tables WHERE table_catalog = '$DB_NAME' and table_schema='public';"
         IS_DATABASE_APPLIED="$(PGPASSWORD="$DB_PASS" psql -qtAX -h "$DB_HOST" -U "$DB_USER" -c "$SQL")"
     elif [ -n "${DB_PLATFORM}" ]; then
-        (>&2 echo "invalid database type")
+        echo "invalid database type" >&2
         exit 1
     fi
 
