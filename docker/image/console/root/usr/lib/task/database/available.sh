@@ -12,7 +12,7 @@ function task_database_available()
         # no database is used
         return
     else
-        (>&2 echo "invalid database type")
+        echo "invalid database type" >&2
         exit 1
     fi
 
@@ -21,7 +21,7 @@ function task_database_available()
     while ! $command &> /dev/null; do
 
         if (( counter > 300 )); then
-            (>&2 echo "timeout while waiting on ${DB_PLATFORM} to become available")
+            echo "timeout while waiting on ${DB_PLATFORM} to become available" >&2
             exit 1
         fi
 

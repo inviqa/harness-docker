@@ -16,7 +16,7 @@ function task_assets_dump()
         PRE_COMMAND=("PGPASSWORD=$DB_PASS")
         DUMP_COMMAND=(pg_dump -h "${DB_HOST}" -U "${DB_USER}" "${DB_NAME}")
     elif [ -n "${DB_PLATFORM}" ]; then
-        (>&2 echo "invalid database type")
+        echo "invalid database type" >&2
         exit 1
     fi
 
