@@ -4,8 +4,11 @@ function task_init()
 {
     task database:available
 
-    if ! db_hasSchema; then
-
+    if [ -n "${DB_PLATFORM:-}" ] && db_hasSchema; then
+        echo "database is populated, skipping init" >&2
+    elif [ -z "${DB_PLATFORM:-}" ]; then
+        echo "no init tasks can run due to no DB_PLATFORM selected" >&2
+    else 
         task assets:apply
 
         {% for step in @('backend.init.steps') -%}
