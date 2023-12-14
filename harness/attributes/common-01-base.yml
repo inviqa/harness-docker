@@ -195,8 +195,10 @@ attributes.default:
     import:
       steps: []
 
-  elasticsearch:
-    host: elasticsearch
+  searchengine:
+    # possible platforms are elasticsearch, opensearch or ~ for none
+    platform: ~
+    host: = @('searchengine.platform')
     port: 9200
 
   domain: my127.site
