@@ -1,6 +1,6 @@
 # Upgrades
 
-## Upgrading from 0.4.x to 0.4.x
+## Upgrading from 0.3.x to 0.4.x
 
 ### Attributes moved
 
