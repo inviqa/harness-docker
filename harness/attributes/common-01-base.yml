@@ -185,8 +185,11 @@ attributes.default:
       = @('database.platform') == 'mysql' ? '8.0'
       : @('database.platform') == 'postgres' ? '15'
       : null
-    host: mysql
-    port: 3306
+    host: = @('database.platform')
+    port: >
+      = @('database.platform') == 'mysql' ? 3306
+      : @('database.platform') == 'postgres' ? 5432
+      : null
     user: app
     pass: app
     name: app
