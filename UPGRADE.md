@@ -1,5 +1,25 @@
 # Upgrades
 
+## Upgrading from 0.3.x to 0.4.x
+
+### Attributes moved
+
+* `elasticsearch.host` -> `searchengine.host`
+* `elasticsearch.port` -> `searchengine.port`
+
+### New searchengine configuration and environment variables
+
+In order to allow more options for search engines than elasticsearch, a new attribute structure was created mirroring how database attributes were done.
+
+```yaml
+searchengine:
+  platform: ~ # elasticsearch or opensearch or ~
+  host: # defaults to platform
+  port: 9200
+```
+
+Therefore the old elasticsearch attributes have been replaced with them, and so workspace attributes altering them should change too.
+
 ## Upgrading from 0.2.x to 0.3.x
 
 ### Attributes moved
