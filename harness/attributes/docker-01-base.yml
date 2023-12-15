@@ -1,5 +1,21 @@
 attributes.default:
   services:
+    _database-access:
+      environment:
+        DB_PLATFORM: = @('database.platform')
+        DB_PLATFORM_VERSION: = @('database.platform_version')
+        DB_HOST: = @('database.host')
+        DB_PORT: = @('database.port')
+        DB_USER: = @('database.user')
+        DB_NAME: = @('database.name')
+    _searchengine-access:
+      environment:
+        SEARCHENGINE_PLATFORM: = @('searchengine.platform')
+        SEARCHENGINE_HOST: = @('searchengine.host')
+        SEARCHENGINE_PORT: = @('searchengine.port')
+        SEARCHENGINE_SCHEME: http
+        # SEARCHENGINE_USERNAME: ~
+        # SEARCHENGINE_PASSWORD: ~
     console:
       enabled: true
       build:
