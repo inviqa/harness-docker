@@ -8,14 +8,17 @@ attributes.default:
         DB_PORT: = @('database.port')
         DB_USER: = @('database.user')
         DB_NAME: = @('database.name')
+      environment_secrets:
+        DB_PASS: = @('database.pass')
     _searchengine-access:
       environment:
         SEARCHENGINE_PLATFORM: = @('searchengine.platform')
         SEARCHENGINE_HOST: = @('searchengine.host')
         SEARCHENGINE_PORT: = @('searchengine.port')
         SEARCHENGINE_SCHEME: http
-        # SEARCHENGINE_USERNAME: ~
-        # SEARCHENGINE_PASSWORD: ~
+      #   SEARCHENGINE_USERNAME: ~
+      # environment_secrets:
+      #   SEARCHENGINE_PASSWORD: ~
     console:
       enabled: true
       build:
