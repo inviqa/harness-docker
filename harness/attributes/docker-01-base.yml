@@ -18,6 +18,7 @@ attributes.default:
       environment:
         ES_JAVA_OPTS: -Xms512m -Xmx512m
         discovery.type: single-node
+        xpack.security.enabled: "false"
       resources:
         memory: "1024Mi"
     lighthouse:
@@ -54,6 +55,7 @@ attributes.default:
       tag: '2'
       environment:
         OPENSEARCH_JAVA_OPTS: -Xms512m -Xmx512m
+        DISABLE_SECURITY_PLUGIN: 'true'
         discovery.type: single-node
       resources:
         memory: "1024Mi"
