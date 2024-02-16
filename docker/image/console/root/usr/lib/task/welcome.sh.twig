@@ -6,8 +6,10 @@ function task_welcome()
 {
     echo ""
     echo "Welcome!"
+    {% if @('services.webapp.enabled') -%}
     echo "--------"
     {% for host in hostnames -%}
     echo "https://{{ host }}"
     {% endfor -%}
-}
+    {% endif -%}
+%}
