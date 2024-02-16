@@ -112,6 +112,15 @@ command('console'):
     #!bash(workspace:/)|@
     passthru $COMPOSE_BIN exec -u "${CODE_OWNER}" console bash
 
+command('root <service>', 'root'):
+  description: Open a default root shell on any running container
+  env:
+    COMPOSE_BIN: = @('docker.compose.bin')
+  exec: |
+    #!bash(workspace:/)|=
+    loginshell=$(docker-compose -p ={ @('namespace') } exec -T ={ input.argument('service') } cat /etc/passwd | grep '^root:' | sed -E 's/^.*:([^:]+)$/\1/')
+    passthru $COMPOSE_BIN exec -u root ={ input.argument('service') } ${loginshell}
+
 command('db-console'): |
   #!bash
   ws db console
