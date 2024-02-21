@@ -118,8 +118,7 @@ command('root <service>', 'root'):
     COMPOSE_BIN: = @('docker.compose.bin')
   exec: |
     #!bash(workspace:/)|=
-    loginshell=$(docker-compose -p ={ @('namespace') } exec -T ={ input.argument('service') } cat /etc/passwd | grep '^root:' | sed -E 's/^.*:([^:]+)$/\1/')
-    passthru $COMPOSE_BIN exec -u root ={ input.argument('service') } ${loginshell}
+    passthru $COMPOSE_BIN exec -u root ={ input.argument('service') } $($COMPOSE_BIN exec -T ={ input.argument('service') } cat /etc/passwd | grep '^root:' | sed -E 's/^.*:([^:]+)$/\1/')
 
 command('db-console'): |
   #!bash
