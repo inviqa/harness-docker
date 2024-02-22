@@ -277,11 +277,11 @@ function('version_compare', [version1, version2, operator]): |
   $version2 .= str_repeat('.0', max(0, $count1 - $count2));
   = version_compare($version1, $version2, $operator);
 
-function('boolToString', [value]): |
+function('boolToString', [value, true_value, false_value]): |
   #!php
   switch ($value) {
-    case true: return 'yes';
-    case false: return 'no';
+    case true: return (string) ($trueVal ?? 'yes');
+    case false: return (string) ($falseVal ?? 'no');
   }
   echo 'error: unknown boolean "'.$value.'"'."\n";
   exit(1);
