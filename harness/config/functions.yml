@@ -280,8 +280,8 @@ function('version_compare', [version1, version2, operator]): |
 function('boolToString', [value, true_value, false_value]): |
   #!php
   switch ($value) {
-    case true: return (string) ($trueVal ?? 'yes');
-    case false: return (string) ($falseVal ?? 'no');
+    case true: return (string) ($true_value ?? 'yes');
+    case false: return (string) ($false_value ?? 'no');
   }
   echo 'error: unknown boolean "'.$value.'"'."\n";
   exit(1);
