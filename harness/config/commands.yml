@@ -112,13 +112,19 @@ command('console'):
     #!bash(workspace:/)|@
     passthru $COMPOSE_BIN exec -u "${CODE_OWNER}" console bash
 
-command('root <service>', 'root'):
-  description: Open a default root shell on any running container
+command('shell [-u=<user>|--user=<user>] <service>', 'shell'):
+  description: Open a default (root) shell on any running container
   env:
     COMPOSE_BIN: = @('docker.compose.bin')
+    ARG_SERVICE: = input.argument('service')
+    OPT_USER: "= input.option('user') ?: 'root'"
   exec: |
     #!bash(workspace:/)|=
-    passthru $COMPOSE_BIN exec -u root ={ input.argument('service') } $($COMPOSE_BIN exec -T ={ input.argument('service') } cat /etc/passwd | grep '^root:' | sed -E 's/^.*:([^:]+)$/\1/')
+    if echo "$OPT_USER" | grep -qv '^[a-z][-a-z0-9_]*$'; then
+      echo "Username pattern not allowed"
+      exit 1
+    fi
+    passthru $COMPOSE_BIN exec -u $OPT_USER $ARG_SERVICE $($COMPOSE_BIN exec -T $ARG_SERVICE cat /etc/passwd | grep "^$OPT_USER:" | sed -E 's/^.*:([^:]+)$/\1/')
 
 command('db-console'): |
   #!bash
