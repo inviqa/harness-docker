@@ -201,6 +201,10 @@ attributes.default:
   searchengine:
     # possible platforms are elasticsearch, opensearch or ~ for none
     platform: ~
+    platform_version: >
+      = @('searchengine.platform') == 'elasticsearch' ? '8'
+      : @('seachengine.platform') == 'opensearch' ? '2'
+      : null
     host: = @('searchengine.platform')
     port: 9200
 
