@@ -117,14 +117,14 @@ command('shell [-u=<user>|--user=<user>] <service>', 'shell'):
   env:
     COMPOSE_BIN: = @('docker.compose.bin')
     ARG_SERVICE: = input.argument('service')
-    OPT_USER: "= input.option('user')"
+    OPT_USER: "= input.option('user') ?: input.option('u')"
   exec: |
     #!bash(workspace:/)|=
-    if [ -n "$OPT_USER" ] && echo "$OPT_USER" | grep -qv '^[a-z][-a-z0-9_]*$'; then
-      echo "Username pattern not allowed"
+    if ! SHELL=$($COMPOSE_BIN exec ${OPT_USER:+--user "$OPT_USER"} -T "$ARG_SERVICE" sh -c 'getent passwd $(whoami) | sed -E '\''s/^.*:([^:]+)$/\1/'\'''); then
+      echo "User not found"
       exit 1
     fi
-    passthru $COMPOSE_BIN exec ${OPT_USER:+--user "$OPT_USER"} "$ARG_SERVICE" "$($COMPOSE_BIN exec -T "$ARG_SERVICE" cat /etc/passwd | grep "^$OPT_USER:" | sed -E 's/^.*:([^:]+)$/\1/')"
+    passthru $COMPOSE_BIN exec ${OPT_USER:+--user "$OPT_USER"} "$ARG_SERVICE" "$SHELL"
 
 command('db-console'): |
   #!bash
