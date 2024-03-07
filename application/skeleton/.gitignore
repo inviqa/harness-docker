@@ -7,6 +7,7 @@
 
 # Files
 /.dockerignore
+/.console.bash_history
 /auth.json
 /docker-compose.yml
 /docker-sync.yml

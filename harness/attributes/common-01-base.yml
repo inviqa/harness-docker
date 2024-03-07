@@ -178,6 +178,9 @@ attributes.default:
     remote: ="s3://"~@("aws.bucket")~"/development"
     local: tools/assets/development
 
+  console:
+    share_histfile: false
+
   database:
     # possible platforms are mysql, postgres or ~ for none
     platform: mysql

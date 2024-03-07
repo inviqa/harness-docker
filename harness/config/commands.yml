@@ -108,9 +108,10 @@ command('console'):
   env:
     CODE_OWNER: = @('app.code_owner')
     COMPOSE_BIN: = @('docker.compose.bin')
+    SHARE_HIST: = @('app.build') == 'dynamic' && @('console.share_histfile')
   exec: |
     #!bash(workspace:/)|@
-    passthru $COMPOSE_BIN exec -u "${CODE_OWNER}" console bash
+    passthru $COMPOSE_BIN exec -u "${CODE_OWNER}" ${SHARE_HIST+--env HISTFILE=/app/.console.bash_history} console bash
 
 command('db-console'): |
   #!bash
