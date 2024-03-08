@@ -14,11 +14,24 @@ In order to allow more options for search engines than elasticsearch, a new attr
 ```yaml
 searchengine:
   platform: ~ # elasticsearch or opensearch or ~
+  platform_version: # depends on platform, 8 for elasticsearch, 2 for opensearch
   host: # defaults to platform
   port: 9200
 ```
 
 Therefore the old elasticsearch attributes have been replaced with them, and so workspace attributes altering them should change too.
+
+### elasticsearch updated to version 8
+
+So that new projects use the latest version where possible, elasticsearch has been updated to 8
+
+Now that the searchengine.platform_version attribute is available, you can switch between major versions with workspace configuration:
+
+```yaml
+attribute('searchengine.platform_version'): 7
+```
+
+If a security fix is needed for the major version though then the tag will also need updating.
 
 ## Upgrading from 0.2.x to 0.3.x
 
