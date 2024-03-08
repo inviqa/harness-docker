@@ -176,22 +176,32 @@ command('port <service>'):
     #!bash(workspace:/)|=
     passthru docker port "$($COMPOSE_BIN ps -q ={input.argument('service')})"
 
+command('unset <attribute>'):
+  env:
+    ATTR_KEY: = input.argument('attribute')
+  exec: |
+    #!bash(workspace:/)|=
+    if [ ! -f workspace.override.yml ]; then
+      touch workspace.override.yml
+    fi
+    if grep -q "^attribute('${ATTR_KEY}'):" workspace.override.yml; then
+      echo "Removing old '${ATTR_KEY}' setting from workspace.override.yml"
+      sed "/^attribute('${ATTR_KEY}'): .*$/d" workspace.override.yml > workspace.override.yml.tmp && mv workspace.override.yml.tmp workspace.override.yml
+    fi
+    if grep -q "^attribute('${ATTR_KEY}'):" workspace.override.yml; then
+      echo 'Could not remove line from workspace.override.yml, failing'
+      exit 1
+    fi
+
 command('set <attribute> <value>'):
   env:
     ATTR_KEY: = input.argument('attribute')
     ATTR_VAL: = input.argument('value')
   exec: |
     #!bash(workspace:/)|=
-    if [ ! -f workspace.override.yml ]; then
-      touch workspace.override.yml
-    fi
-    if grep -q "attribute('${ATTR_KEY}'):" workspace.override.yml; then
-      echo "Removing old '${ATTR_KEY}' setting from workspace.override.yml"
-      sed "/^attribute('${ATTR_KEY}'): .*$/d" workspace.override.yml > workspace.override.yml.tmp && mv workspace.override.yml.tmp workspace.override.yml
-    fi
-    if grep -q "attribute('${ATTR_KEY}'):" workspace.override.yml; then
-      echo 'Could not remove line from workspace.override.yml, failing'
-      exit 1
+    passthru ws unset ${ATTR_KEY}
+    if [ $(tail -c1 workspace.override.yml | wc -l) -eq 0 ]; then
+      echo -e "\n" >> workspace.override.yml
     fi
     echo "Setting '${ATTR_KEY}' setting to '${ATTR_VAL}' in workspace.override.yml"
     echo "attribute('${ATTR_KEY}'): ${ATTR_VAL}" >> workspace.override.yml
