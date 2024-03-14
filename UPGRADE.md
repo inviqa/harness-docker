@@ -33,6 +33,14 @@ attribute('searchengine.platform_version'): 7
 
 If a security fix is needed for the major version though then the tag will also need updating.
 
+### console build environment deprecated
+
+The `services.console.build.environment` attribute is deprecated and may be obsoleted in a future release.
+
+It is recommended instead to use `services.console.build.args` instead, which work similarly for image builds, but the variables are not available at runtime anymore. If they are needed at runtime then also declare them in `services.console.environment`.
+
+It should be noted however, the build arguments are still contained within the image metadata so this still wouldn't remove secrets declared this way.
+
 ## Upgrading from 0.2.x to 0.3.x
 
 ### Attributes moved

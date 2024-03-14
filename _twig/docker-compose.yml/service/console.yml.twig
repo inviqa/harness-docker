@@ -7,6 +7,7 @@ services:
     build:
       context: ./
       dockerfile: .my127ws/docker/image/console/Dockerfile
+      args: {{ to_nice_yaml(@('services.console.build.args')|default({}), 2, 8) }}
 {% if @('app.build') == 'dynamic' %}
     entrypoint: [/entrypoint.dynamic.sh]
     command: [sleep, infinity]
