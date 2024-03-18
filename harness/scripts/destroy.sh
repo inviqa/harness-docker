@@ -9,7 +9,7 @@ else
   RMI=local
 fi
 
-run "${COMPOSE_BIN[*]}" down --rmi "${RMI}" --volumes --remove-orphans --timeout 120
+run "${COMPOSE_BIN[*]}" down --rmi "${RMI}" --volumes --remove-orphans ${SHUTDOWN_TIMEOUT:+--timeout "$SHUTDOWN_TIMEOUT"}
 
 if [ "${USE_MUTAGEN}" = yes ]; then
   run ws mutagen stop

@@ -142,6 +142,7 @@ attributes.default:
     compose:
       bin: 'docker compose'
       host_volume_options: "= ':' ~ (@('delegated-volumes') ? 'delegated' : 'cached')"
+      shutdown_timeout: ~
     # If using gitops helm chart repositories, it's recommended to put this configuration
     # in the values.yml in there now instead of project application repositories
     image_pull_config: = @('docker.config')

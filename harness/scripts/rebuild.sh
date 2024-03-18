@@ -3,7 +3,7 @@
 # shellcheck disable=SC2206
 COMPOSE_BIN=($COMPOSE_BIN)
 
-run "${COMPOSE_BIN[*]}" down --rmi local --volumes --remove-orphans --timeout 120
+run "${COMPOSE_BIN[*]}" down --rmi local --volumes --remove-orphans ${SHUTDOWN_TIMEOUT:+--timeout "$SHUTDOWN_TIMEOUT"}
 
 passthru ws cleanup built-images
 

@@ -54,6 +54,7 @@ command('destroy [--all]'):
     NAMESPACE:            = @('namespace')
     COMPOSE_BIN: = @('docker.compose.bin')
     DESTROY_ALL:          = boolToString(input.option('all'))
+    SHUTDOWN_TIMEOUT: = @('docker.compose.shutdown_timeout')
   exec: |
     #!bash(workspace:/)|@
     source .my127ws/harness/scripts/destroy.sh
@@ -63,6 +64,7 @@ command('rebuild'):
     USE_MUTAGEN:          = boolToString(@('host.os') == 'darwin' and @('mutagen'))
     NAMESPACE:            = @('namespace')
     COMPOSE_BIN: = @('docker.compose.bin')
+    SHUTDOWN_TIMEOUT: = @('docker.compose.shutdown_timeout')
   exec: |
     #!bash(workspace:/)|@
     source .my127ws/harness/scripts/rebuild.sh
