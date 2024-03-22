@@ -44,29 +44,7 @@ spec:
           restartPolicy: Never
           containers:
             - name: app
-              {{- with .environment }}
-              env:
-              {{- range $key, $value := . }}
-                - name: {{ $key | quote }}
-                {{- if kindIs "string" $value }}
-                  value: {{ tpl $value $ | quote }}
-                {{- else if kindIs "map" $value }}
-                  {{ tpl ($value | toYaml) $ | nindent 18 }}
-                {{- else }}
-                  value: {{ $value | quote }}
-                {{- end }}
-              {{- end }}
-              {{- end }}
-              {{- if or $service.environment_secrets .envFrom }}
-              envFrom:
-                {{- if $service.environment_secrets }}
-                - secretRef:
-                    name: {{ print $.Release.Name "-" $serviceName }}
-                {{- end }}
-                {{- with .envFrom }}
-                {{- tpl (. | toYaml) $ | nindent 16 }}
-                {{- end }}
-              {{- end }}
+              {{- include "service.environment" (dict "root" $ "serviceName" $serviceName "service" $service) | nindent 14 }}
               image: {{ .image | quote }}
               imagePullPolicy: Always
               {{- with (pick $cronConfig "command" "args") }}
