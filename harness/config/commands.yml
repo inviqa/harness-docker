@@ -230,6 +230,7 @@ command('harness update existing'):
 
 command('harness post-update'):
   exec: |
+    #!bash(workspace:/)
     ws exec app overlay:apply
     ws exec app migrate
     ws exec app welcome
