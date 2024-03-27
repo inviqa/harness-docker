@@ -16,6 +16,7 @@ setup_app_volume_permissions()
             groupmod -g 1000 "${CODE_OWNER_GROUP}"
             ;;
         *)
+            echo "error: unsupported /app volume permission strategy '$STRATEGY'" >&2
             exit 1
     esac
 
@@ -39,10 +40,15 @@ resolve_volume_mount_strategy()
             STRATEGY="host-osx-dockersync"
         elif (mount | grep "/app type btrfs") > /dev/null 2>&1; then
             STRATEGY="host-linux-normal"
+        elif (mount | grep "/app type") > /dev/null; then
+            echo "error: unsupported mount type for $(mount | grep "/app type")" >&2
+            exit 1
         else
+            echo "error: mount for /app not found" >&2
             exit 1
         fi
     else
+        echo "error: unsupported host OS family '$HOST_OS_FAMILY'" >&2
         exit 1
     fi
 }
