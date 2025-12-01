@@ -3,7 +3,7 @@ attributes.default:
     console:
       enabled: true
       build:
-        from: debian:buster-slim
+        from: debian:trixie-slim
         environment: {}
       environment:
         HOST_OS_FAMILY: = @('host.os')
