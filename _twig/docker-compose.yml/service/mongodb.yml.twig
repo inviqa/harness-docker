@@ -6,9 +6,6 @@ services:
         @('services.mongodb.environment_dynamic'),
         @('services.mongodb.environment_secrets')
       ]), 2, 6) }}
-    labels:
-      # deprecated, a later workspace release will disable by default
-      - traefik.enable=false
     networks:
       - private
     expose:
