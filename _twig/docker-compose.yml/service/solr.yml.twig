@@ -12,14 +12,9 @@ services:
         @('services.solr.environment_secrets')
       ]), 2, 6) }}
     labels:
-      # Traefik 1, deprecated
-      - traefik.backend={{ @('workspace.name') }}-solr
-      - traefik.frontend.rule=Host:solr-{{  @('hostname') }}
-      - traefik.docker.network=my127ws
-      - traefik.port=8983
       # Traefik 2
       - traefik.enable=true
-      # - traefik.docker.network=my127ws
+      - traefik.docker.network=my127ws
       - traefik.http.routers.{{ @('workspace.name') }}-solr.rule=Host(`solr-{{  @('hostname') }}`)
       - traefik.http.services.{{ @('workspace.name') }}-solr.loadbalancer.server.port=8983
     volumes:
