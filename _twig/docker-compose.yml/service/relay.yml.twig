@@ -1,9 +1,6 @@
 services:
   relay:
     build: .my127ws/docker/image/relay
-    labels:
-      # deprecated, a later workspace release will disable by default
-      - traefik.enable=false
     networks:
       private:
         aliases:

@@ -1,9 +1,6 @@
 services:
   elasticsearch:
     image: {{ @('services.elasticsearch.image') }}
-    labels:
-      # deprecated, a later workspace release will disable by default
-      - traefik.enable=false
     environment: {{ to_nice_yaml(deep_merge([
         @('services.elasticsearch.environment'),
         @('services.elasticsearch.environment_dynamic'),
